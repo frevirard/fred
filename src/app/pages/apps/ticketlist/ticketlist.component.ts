@@ -1,3 +1,4 @@
+import { Employee } from './../../datatable/kichen-sink/kichen-sink';
 import { Component, OnInit, Inject, Optional, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import {
@@ -9,9 +10,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MaterialModule } from 'src/app/material.module';
 import { CommonModule } from '@angular/common';
 import { TablerIconsModule } from 'angular-tabler-icons';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { Observable, startWith, map } from 'rxjs';
+import { State } from '../../forms/form-elements';
 
 export interface TicketElement {
   id: number;
@@ -21,6 +24,7 @@ export interface TicketElement {
   imgSrc: string;
   status: string;
   date: any;
+  progression:number;
 }
 
 const tickets: TicketElement[] = [
@@ -33,6 +37,7 @@ const tickets: TicketElement[] = [
     assignee: 'Kaxandra LABAT',
     status: 'En cours',
     date: new Date('02/8/2024'),
+    progression:40
   },
   {
     id: 2,
@@ -43,6 +48,7 @@ const tickets: TicketElement[] = [
     imgSrc: '/assets/images/profile/user-1.jpg',
     status: 'Ouvert',
     date: new Date('03/7/2024'),
+    progression:13
   },
   {
     id: 3,
@@ -53,6 +59,7 @@ const tickets: TicketElement[] = [
     imgSrc: '/assets/images/profile/user-3.jpg',
     status: 'Clôturé',
     date: new Date('05/6/2024'),
+    progression:0
   },
   {
     id: 4,
@@ -63,6 +70,7 @@ const tickets: TicketElement[] = [
     imgSrc: '/assets/images/profile/user-1.jpg',
     status: 'En cours',
     date: new Date('06/5/2024'),
+    progression:0
   },
   // {
   //   id: 5,
@@ -126,6 +134,54 @@ const tickets: TicketElement[] = [
   // },
 ];
 
+const employees = [
+  {
+    id: 1,
+    Name: 'Kaxandra LABAT',
+    Position: 'Consultant Junior',
+    Email: 'Labat.kaxandra@lendys.com',
+    Mobile: 9786838,
+    DateOfJoining: new Date('01-2-2020'),
+    Salary: "Transfo Finance",
+    Projects: 10,
+    imagePath: 'assets/images/profile/user-2.jpg',
+  },
+  {
+    id: 2,
+    Name: 'Mohamed MENAOUI',
+    Position: 'Consultant Data',
+    Email: 'M.OUI@lendys.com',
+    Mobile: 8786838,
+    DateOfJoining: new Date('04-2-2020'),
+    Salary: "Compta",
+    Projects: 10,
+    imagePath: 'assets/images/profile/user-3.jpg',
+  },
+  {
+    id: 2,
+    Name: 'Coulibaly Zagnon',
+    Position: 'Senior Consultant',
+    Email: 'Coulibaly.Zagnon@lendys.com',
+    Mobile: 8786838,
+    DateOfJoining: new Date('04-2-2020'),
+    Salary: "Consolidation",
+    Projects: 10,
+    imagePath: 'assets/images/profile/user-3.jpg',
+  },
+  {
+    id: 2,
+    Name: 'Frederic Edem EKEWOU',
+    Position: 'Senior Consultant',
+    Email: 'frederic.ekewou@lendys.com',
+    Mobile: 8786838,
+    DateOfJoining: new Date('04-2-2020'),
+    Salary: "Transfo Finance",
+    Projects: 10,
+    imagePath: 'assets/images/profile/user-3.jpg',
+  }
+
+];
+
 @Component({
   selector: 'app-ticket-list',
   templateUrl: './ticketlist.component.html',
@@ -154,10 +210,12 @@ export class AppTicketlistComponent implements OnInit {
     'title',
     'assignee',
     'status',
+    'progression',
     'date',
     'action',
   ];
   dataSource = new MatTableDataSource(tickets);
+
 
   constructor(public dialog: MatDialog) {}
 
@@ -185,7 +243,7 @@ export class AppTicketlistComponent implements OnInit {
   openDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AppTicketDialogContentComponent, {
-      data: obj,
+      data: { obj, employees}
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -209,6 +267,7 @@ export class AppTicketlistComponent implements OnInit {
       imgSrc: '/assets/images/profile/user-1.jpg',
       status: row_obj.status,
       date: row_obj.date,
+      progression:row_obj.progression
     });
     this.table.renderRows();
   }
@@ -222,6 +281,8 @@ export class AppTicketlistComponent implements OnInit {
         value.assignee = row_obj.assignee;
         value.status = row_obj.status;
         value.date = row_obj.date;
+        value.progression = row_obj.progression;
+        value.imgSrc = row_obj.imgSrc;
       }
       return true;
     });
@@ -253,17 +314,42 @@ export class AppTicketDialogContentComponent {
   action: string;
   // tslint:disable-next-line - Disables all
   local_data: any;
+  employees:any[];
+
+  stateCtrl = new FormControl('');
+
+  filteredSEmployee: Observable<any[]>;
 
   constructor(
     public dialogRef: MatDialogRef<AppTicketDialogContentComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: TicketElement
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any ,private _formBuilder: FormBuilder
   ) {
-    this.local_data = { ...data };
+
+    this.filteredSEmployee = this.stateCtrl.valueChanges.pipe(
+      startWith(''),
+      map((state) => (state ? this._filteredSEmployee(state) : this.employees.slice()))
+    );
+
+    this.local_data = { ...data.obj };
+    this.employees = data.employees;
+    console.log (data)
     this.action = this.local_data.action;
+  }
+
+  private _filteredSEmployee(value: string): any[] {
+    const filterValue = value.toLowerCase();
+
+    return this.employees.filter((employee) =>
+      employee.Name.toLowerCase().includes(filterValue)
+    );
   }
 
   doAction(): void {
     this.dialogRef.close({ event: this.action, data: this.local_data });
+  }
+
+  updatePicture(imagePath:string) {
+    this.local_data.imgSrc = imagePath;
   }
 
   closeDialog(): void {

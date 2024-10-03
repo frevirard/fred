@@ -44,7 +44,7 @@ export const navItems: NavItem[] = [
   //   route: 'apps/contacts',
   // },
   {
-    displayName: 'Cours',
+    displayName: 'Support de formation',
     iconName: 'solar:book-bookmark-line-duotone',
     route: 'apps/courses',
   },

@@ -158,6 +158,7 @@ export class AppAutocompleteComponent implements OnInit {
 
   // state
   stateCtrl = new FormControl('');
+
   filteredStates: Observable<State[]>;
 
   states: State[] = [
@@ -188,6 +189,7 @@ export class AppAutocompleteComponent implements OnInit {
   ];
 
   constructor(private _formBuilder: FormBuilder) {
+
     this.filteredStates = this.stateCtrl.valueChanges.pipe(
       startWith(''),
       map((state) => (state ? this._filterStates(state) : this.states.slice()))

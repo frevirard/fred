@@ -6,4 +6,5 @@ export interface Ticket {
   imgSrc: string;
   status: string;
   date: string;
+  progression: number;
 }
