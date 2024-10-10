@@ -40,12 +40,12 @@ export class AppRevenueForecastComponent {
       series: [
         {
           name: '2023',
-          data: [50, 60, 30, 55, 75, 60, 100, 120],
+          data: [50, 60, 30, 55, 75, 60, 100, 120,12,20,14,20],
         },
 
         {
           name: '2022',
-          data: [35, 45, 40, 50, 35, 55, 40, 45],
+          data: [35, 45, 40, 50, 35, 55, 40, 45,2,10,10,18]
         },
         {
           name: '2024',
@@ -111,7 +111,7 @@ export class AppRevenueForecastComponent {
         axisTicks: {
           show: false,
         },
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug'],
+        categories: ['Jan', 'Fev', 'Mar', 'Avril', 'Mai', 'Juin', 'Juil', 'Août','Sept','Oct','Nov','Dec'],
       },
       markers: {
         strokeColor: ['rgba(255, 102, 146, 1)', '#16cdc7', 'rgba(99, 91, 255, 1)'],
