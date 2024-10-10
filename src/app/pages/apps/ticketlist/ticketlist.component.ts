@@ -74,22 +74,27 @@ export class AppTicketlistComponent implements OnInit {
     'date',
     'action',
   ];
+
   dataSource = new MatTableDataSource(this.tickets);
+  loading = true;
+  loadingBis = true;
 
 
   constructor(public dialog: MatDialog,private _snackBar: MatSnackBar,private http: HttpClient,private jwt:TokenStorageService) {}
 
   ngOnInit(): void {
+    this.loading = true;
+    this.loadingBis = true;
     this.jwt.logInCheck();
     // recuperer la liste des consultants
     this.http.get<Employee[]>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/getAll" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
           next: (x) => { this.employees= x;
-            this.dataSource = new MatTableDataSource(this.employees);
+            this.loading = false;
           },
           error: (err) => {
             console.log(err);
-
+            this.loading = false;
             this._snackBar.open("Echec Récupération liste des consultants", "502", {
               duration: 2000
             })
@@ -99,16 +104,19 @@ export class AppTicketlistComponent implements OnInit {
     // recuperer la liste des actions
     this.http.get<TicketElement[]>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/actions/getAll" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
-          next: (x) => { this.tickets= x;  this.dataSource = new MatTableDataSource(this.tickets);
+          next: (x) => {
+            console.log(x)
+            this.tickets= x;
             this.totalCount = this.dataSource.data.length;
+            this.dataSource = new MatTableDataSource(this.tickets);
             this.Open = this.btnCategoryClick('Ouvert');
             this.Closed = this.btnCategoryClick('Cloture');
             this.Inprogress = this.btnCategoryClick('En cours');
-            this.dataSource = new MatTableDataSource(this.tickets);
+            this.loadingBis = false;
           },
           error: (err) => {
             console.log(err);
-
+            this.loadingBis = false;
             this._snackBar.open("Echec Récupération liste des tickets", "502", {
               duration: 2000
             })
@@ -117,6 +125,7 @@ export class AppTicketlistComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    this.dataSource = new MatTableDataSource(this.tickets);
     this.dataSource.paginator = this.paginator;
   }
 
@@ -223,11 +232,6 @@ export class AppTicketlistComponent implements OnInit {
             })
           }
         })
-
-
-
-
-
   }
 }
 

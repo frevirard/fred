@@ -17,7 +17,20 @@
     </div>
   </mat-card-content>
 </mat-card>
-<mat-card class="cardWithShadow">
+
+<div *ngIf="this.loading">
+  <mat-card class="b-1 shadow-none">
+    <mat-card-header style="display: flex; justify-content: center;">
+      <mat-card-title>Chargement...</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="b-t-1" style="display: flex; justify-content: center;">
+      <mat-spinner></mat-spinner>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+<mat-card class="cardWithShadow" *ngIf="!this.loading">
   <mat-card-content class="p-24">
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" class="w-100">

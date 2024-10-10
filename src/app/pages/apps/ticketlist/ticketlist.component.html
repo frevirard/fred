@@ -26,7 +26,7 @@
   </div>
   <div class="col-sm-6 col-lg-3">
     <mat-card class="shadow-none">
-      <div class="p-30 bg-error text-center cursor-pointer rounded" (click)="btnCategoryClick('Cloturé')">
+      <div class="p-30 bg-error text-center cursor-pointer rounded" (click)="btnCategoryClick('Cloture')">
         <h3 class="f-s-24 text-white m-0 m-b-4">{{ Closed }}</h3>
         <h6 class="text-white f-w-600 m-0 f-s-16">Clôturés</h6>
       </div>
@@ -54,10 +54,24 @@
   </mat-card-content>
 </mat-card>
 <!-- table -->
-<mat-card class="cardWithShadow">
+
+
+<div *ngIf="this.loading || this.loadingBis">
+  <mat-card class="b-1 shadow-none">
+    <mat-card-header style="display: flex; justify-content: center;">
+      <mat-card-title>Chargement...</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="b-t-1" style="display: flex; justify-content: center;">
+      <mat-spinner></mat-spinner>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+<mat-card class="cardWithShadow" *ngIf="!this.loading && !this.loadingBis ">
   <mat-card-content>
-    <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" class="w-100 f-w-500 no-wrap">
+    <div class="table-responsive" >
+      <table mat-table [dataSource]="dataSource" class="w-100 f-w-500 no-wrap" *ngIf="dataSource.data">
         <ng-container matColumnDef="categorie">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Categorie</th>
           <td mat-cell *matCellDef="let element">

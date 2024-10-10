@@ -14,7 +14,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { AppAddEmployeeComponent } from './add/add.component';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
@@ -59,6 +59,7 @@ export interface Employee {
     TablerIconsModule,
     MatNativeDateModule,
     DatePipe,
+    CommonModule
   ],
   providers: [DatePipe , { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
 })
@@ -89,7 +90,7 @@ export class AppEmployeeComponent implements AfterViewInit,OnInit {
     this.jwt.logInCheck();
     this.http.get<Employee[]>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/getAll" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
-          next: (x) => { this.employees= x; this.loading = false ; this.dataSource = new MatTableDataSource(this.employees);console.log(x)},
+          next: (x) => { this.employees= x; this.loading = false ; this.dataSource = new MatTableDataSource(this.employees);},
           error: (err) => {
             console.log(err);
             this.loading = false;
@@ -258,7 +259,6 @@ export class AppEmployeeDialogContentComponent implements OnInit {
     this.http.post<Employee>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/add" ,this.local_data,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
           next: (x) => { this.local_data= x;
-                         console.log(x);
                          this.dialogRef.close({ event: this.action, data: this.local_data });
           },
           error: (err) => {

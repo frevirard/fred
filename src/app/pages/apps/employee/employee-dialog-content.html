@@ -64,9 +64,13 @@
           <mat-label>Pôle</mat-label>
           <mat-select value="0" name="pole" [(ngModel)]="local_data.pole">
             <mat-option value="0"></mat-option>
-            <mat-option value="Transfo Finance">Transfo Finance</mat-option>
-            <mat-option value="Consolidation">Consolidation</mat-option>
-            <mat-option value="Compta">Compta</mat-option>
+            <mat-option value="Transformation Finance">Transformation Finance</mat-option>
+            <mat-option value="Consolidation">Consolidation & Reporting IFRS / Prudentiel</mat-option>
+            <mat-option value="Compta">Comptabilité - Fiscalité</mat-option>
+            <mat-option value="FSO">Financial Services & Operations</mat-option>
+            <mat-option value="Pilotage et Performance">Pilotage & Performance</mat-option>
+            <mat-option value="Risque et Actuariat">Risque et Actuariat</mat-option>
+
           </mat-select>
         </mat-form-field>
       </div>
@@ -109,21 +113,21 @@
       <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Poste occupé</mat-label>
-          <input type="text" matInput required id="position" name="posteOccupe" [(ngModel)]="local_data.posteOccupe"
+          <input type="text" matInput id="position" name="posteOccupe" [(ngModel)]="local_data.posteOccupe"
             placeholder="Poste occupé" />
         </mat-form-field>
       </div>
       <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Email</mat-label>
-          <input type="text" matInput required id="email" name="email" [(ngModel)]="local_data.email"
+          <input type="text" matInput id="email" name="email" [(ngModel)]="local_data.email"
             placeholder="Email" />
         </mat-form-field>
       </div>
       <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Mobile</mat-label>
-          <input type="text" matInput required id="mobile" name="mobile" [(ngModel)]="local_data.mobile"
+          <input type="text" matInput id="mobile" name="mobile" [(ngModel)]="local_data.mobile"
             placeholder="Tel: 06 xx xx xx xx" />
         </mat-form-field>
       </div>
