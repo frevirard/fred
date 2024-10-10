@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Input,
   ViewEncapsulation,
+  OnInit,
 } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,6 +17,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AppSettings } from 'src/app/config';
+import { TokenStorageService } from 'src/app/services/tokenStorage.service';
+import { Subscription } from 'rxjs';
 
 interface notifications {
   id: number;
@@ -55,7 +58,7 @@ interface apps {
   templateUrl: './header.component.html',
   encapsulation: ViewEncapsulation.None,
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   @Input() showToggle = true;
   @Input() toggleChecked = false;
   @Output() toggleMobileNav = new EventEmitter<void>();
@@ -94,17 +97,45 @@ export class HeaderComponent {
       icon: '/assets/images/flag/icon-flag-de.svg',
     },
   ];
+  checkConnectStatue: Subscription | undefined;
+  isConnected:boolean =false;
+  username:string = ''
+
 
   constructor(
     private settings: CoreService,
     private vsidenav: CoreService,
     public dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private jwtService: TokenStorageService
   ) {
     translate.setDefaultLang('en');
   }
+  ngOnInit(): void {
+    this.jwtService.logInCheck();
+    if(!this.jwtService.tokenExpired(this.jwtService.getToken()!)) {
+      this.jwtService.connectStatut();
+      this.jwtService.getToken;
+      this.username = this.jwtService.getUser().userName;
+
+      this.checkConnectStatue = this.jwtService.currentSatue.subscribe(x=> {
+        this.isConnected = x;
+      })
+    }
+  }
 
   options = this.settings.getOptions();
+
+  ngOnDestroy() {
+    // this.checkConnectStatue!.unsubscribe();
+  }
+
+  logout() {
+    this.jwtService.signOut()
+    this.isConnected = false;
+    window.location.reload();
+  }
+
 
   setDark() {
     this.settings.toggleTheme();
@@ -172,7 +203,7 @@ export class HeaderComponent {
       id: 1,
       title: 'Tableau de bord',
       link: '/',
-     }
+     },
     // {
     //   id: 2,
     //   title: 'My Subscription',
@@ -189,11 +220,11 @@ export class HeaderComponent {
     //   title: ' Account Settings',
     //   link: '/',
     // },
-    // {
-    //   id: 5,
-    //   title: 'Sign Out',
-    //   link: '/authentication/login',
-    // },
+    //  {
+    //    id: 5,
+    //    title: 'Déconnexion',
+    //    link: '/authentication/boxed-login',
+    //  },
   ];
 
   apps: apps[] = [
@@ -279,4 +310,6 @@ export class AppSearchDialogComponent {
   // filtered = this.navItemsData.find((obj) => {
   //   return obj.displayName == this.searchinput;
   // });
+
+
 }

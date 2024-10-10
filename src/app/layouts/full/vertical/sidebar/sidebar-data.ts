@@ -5,7 +5,7 @@ export const navItems: NavItem[] = [
     navCap: 'KPIs',
   },
   {
-    displayName: 'KPI 1',
+    displayName: 'Tableau de bord',
     iconName: 'solar:widget-add-line-duotone',
     route: '/dashboards/dashboard1',
   },
@@ -28,11 +28,11 @@ export const navItems: NavItem[] = [
   //   iconName: 'solar:chat-round-line-line-duotone',
   //   route: 'apps/chat',
   // },
-  {
-    displayName: 'Calendrier',
-    iconName: 'solar:calendar-mark-line-duotone',
-    route: 'apps/calendar',
-  },
+  // {
+  //   displayName: 'Calendrier',
+  //   iconName: 'solar:calendar-mark-line-duotone',
+  //   route: 'apps/calendar',
+  // },
   // {
   //   displayName: 'Email',
   //   iconName: 'solar:letter-line-duotone',
@@ -59,7 +59,7 @@ export const navItems: NavItem[] = [
     route: 'apps/notes',
   },
   {
-    displayName: 'Projets',
+    displayName: 'Actions',
     iconName: 'solar:ticket-sale-line-duotone',
     route: 'apps/tickets',
   },
@@ -74,7 +74,7 @@ export const navItems: NavItem[] = [
   //   route: 'apps/todo',
   // },
   {
-    displayName: 'Taskboard',
+    displayName: 'Suivi Projets',
     iconName: 'solar:clapperboard-edit-line-duotone',
     route: 'apps/taskboard',
   // },

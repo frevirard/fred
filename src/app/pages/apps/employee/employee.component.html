@@ -21,66 +21,65 @@
   <mat-card-content class="p-24">
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" class="w-100">
-        <ng-container matColumnDef="#">
+        <!-- <ng-container matColumnDef="#">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
           <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-        </ng-container>
+        </ng-container> -->
 
-        <ng-container matColumnDef="name">
+        <ng-container matColumnDef="nom">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Nom</th>
           <td mat-cell *matCellDef="let element">
             <div class="d-flex align-items-center">
-              <img class="rounded-circle" [src]="element.imagePath" width="40" />
+              <img class="rounded-circle" [src]="element.avatar" width="40" />
               <div class="m-l-16">
                 <p class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                  {{ element.Name }}
+                  {{ element.nom }} {{element.prenoms}}
                 </p>
-                <small class="mat-body-1 f-s-14">{{ element.Position }}</small>
+                <small class="mat-body-1 f-s-14"> {{ element.pole }}</small>
               </div>
             </div>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="email">
+        <ng-container matColumnDef="statu">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Email
+           Statut
           </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.Email }}</td>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.statu }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="mobile">
+        <ng-container matColumnDef="dateInterco">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Téléphone
+            Date début Interco
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.Mobile }}
+            {{ element.dateInterco | date:'dd/MM/yyyy' }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="date of joining">
+        <ng-container matColumnDef="carence">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Date de début Interco
+            Carence
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.DateOfJoining | date:'EEEE, d MMMM y' }}
+            {{ element.carence }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="salary">
+        <!-- <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Pôle
-          </th>
+            Email </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.Salary }}
+            {{ element.email }}
           </td>
-        </ng-container>
+        </ng-container> -->
 
-        <ng-container matColumnDef="projects">
+        <ng-container matColumnDef="projets">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Projets
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.Projects }}
+            {{ element.projets }}
           </td>
         </ng-container>
 

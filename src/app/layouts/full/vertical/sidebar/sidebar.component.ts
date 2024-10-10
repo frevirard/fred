@@ -17,6 +17,7 @@ import { MaterialModule } from 'src/app/material.module';
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent implements OnInit {
+
   constructor() { }
   @Input() showToggle = true;
   @Output() toggleMobileNav = new EventEmitter<void>();

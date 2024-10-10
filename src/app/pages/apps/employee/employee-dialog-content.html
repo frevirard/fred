@@ -4,54 +4,140 @@
 <mat-dialog-content style="max-width: 600px">
   <form #userForm="ngForm">
     <div class="d-flex align-items-center m-b-16">
-      <img class="mat-card-avatar" [src]="local_data.imagePath" class="rounded-circle" width="50" />
+      <img class="mat-card-avatar" [src]="local_data.avatar" class="rounded-circle" width="50" />
       <button mat-flat-button color="primary" class="m-l-16 input-file-button">
-        <input type="file" (change)="selectFile($event)" #fileInput />
+        Avatar
+        <!-- <input type="file" (change)="selectFile($event)" #fileInput /> -->
       </button>
+      <div class="col-lg-6" style="margin-top: 20px;">
+
+        <mat-form-field appearance="outline" class="w-100">
+          <!-- <mat-label>Avatar</mat-label> -->
+          <input
+          [matAutocomplete]="auto3"
+          [formControl]="stateCtrl"
+          type="text" matInput required id="nom" name="avatar"
+          [(ngModel)]="local_data.avatar"
+          placeholder="Avatar"
+          />
+       </mat-form-field>
+
+        <mat-autocomplete #auto3="matAutocomplete">
+          @for(avatar of avatars; track avatar) {
+          <mat-option (click)="updatePicture(avatar)"
+            [value]="avatar"
+            class="d-flex align-items-center"
+          >
+            <img alt="" class="m-r-8" [src]="avatar" height="25" />
+
+            <span>Choisir</span> |
+            <small>avatar</small>
+          </mat-option>
+          }
+        </mat-autocomplete>
+      </div>
+
     </div>
     <div class="row">
       <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput required id="name" name="name" [(ngModel)]="local_data.Name" placeholder="Nom" />
+          <mat-label>Nom</mat-label>
+          <input type="text" matInput required id="nom" name="nom" [(ngModel)]="local_data.nom" placeholder="Nom" />
         </mat-form-field>
       </div>
+
       <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput required id="position" name="position" [(ngModel)]="local_data.Position"
+          <mat-label>Prénoms</mat-label>
+          <input type="text" matInput required id="prenoms" name="prenoms"  placeholder="Prénoms"  [(ngModel)]="local_data.prenoms"/>
+        </mat-form-field>
+      </div>
+
+
+
+
+
+
+
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Pôle</mat-label>
+          <mat-select value="0" name="pole" [(ngModel)]="local_data.pole">
+            <mat-option value="0"></mat-option>
+            <mat-option value="Transfo Finance">Transfo Finance</mat-option>
+            <mat-option value="Consolidation">Consolidation</mat-option>
+            <mat-option value="Compta">Compta</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Statut</mat-label>
+          <mat-select value="0" name="statu" [(ngModel)]="local_data.statu">
+            <mat-option value="0"></mat-option>
+            <mat-option value="Ancien">Ancien</mat-option>
+            <mat-option value="Nouveau">Nouveau</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Date début interco</mat-label>
+          <input placeholder="Date début interco" [matDatepicker]="picker" matInput required id="doj" name="dateInterco"
+            [(ngModel)]="local_data.dateInterco" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Carence</mat-label>
+          <mat-select name="carence" value="0" [(ngModel)]="local_data.carence">
+            <mat-option value="0"></mat-option>
+            <mat-option value="Oui">Oui</mat-option>
+            <mat-option value="Non">Non</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Poste occupé</mat-label>
+          <input type="text" matInput required id="position" name="posteOccupe" [(ngModel)]="local_data.posteOccupe"
             placeholder="Poste occupé" />
         </mat-form-field>
       </div>
       <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput required id="email" name="email" [(ngModel)]="local_data.Email"
+          <mat-label>Email</mat-label>
+          <input type="text" matInput required id="email" name="email" [(ngModel)]="local_data.email"
             placeholder="Email" />
         </mat-form-field>
       </div>
       <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput required id="mobile" name="mobile" [(ngModel)]="local_data.Mobile"
-            placeholder="Mobile" />
+          <mat-label>Mobile</mat-label>
+          <input type="text" matInput required id="mobile" name="mobile" [(ngModel)]="local_data.mobile"
+            placeholder="Tel: 06 xx xx xx xx" />
         </mat-form-field>
       </div>
-      <div class="col-lg-6">
 
-        <mat-form-field appearance="outline" class="w-100">
-          <input placeholder="Date début interco" [matDatepicker]="picker" matInput required id="doj" name="doj"
-            [(ngModel)]="local_data.DateOfJoining" />
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div class="col-lg-6">
+      <!-- <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100">
           <input type="text" matInput required id="salary" name="salary" [(ngModel)]="local_data.Salary"
             placeholder="Pôle" />
         </mat-form-field>
-      </div>
+      </div> -->
       <div class="col-lg-6">
         <mat-form-field appearance="outline" class="w-100">
-          <input type="text" matInput required id="projects" name="Projet" [(ngModel)]="local_data.Projects"
-            placeholder="Projects" />
+          <input type="number" matInput required id="projects" name="projets" [(ngModel)]="local_data.projets"
+            placeholder="Projets" />
         </mat-form-field>
       </div>
     </div>

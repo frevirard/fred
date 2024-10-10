@@ -11,6 +11,8 @@ import { NavService } from '../../../../services/nav.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { AppHorizontalNavItemComponent } from './nav-item/nav-item.component';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { TokenStorageService } from 'src/app/services/tokenStorage.service';
 
 @Component({
   selector: 'app-horizontal-sidebar',
@@ -25,7 +27,13 @@ export class AppHorizontalSidebarComponent implements OnInit {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
+  checkConnectStatue: Subscription | undefined;
+  isConnected:boolean =false;
+  username:string = ''
+
+
   constructor(
+    private jwtService: TokenStorageService,
     public navService: NavService,
     public router: Router,
     media: MediaMatcher,
@@ -39,5 +47,27 @@ export class AppHorizontalSidebarComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+
+
+  ngOnInit() {
+    if(!this.jwtService.tokenExpired(this.jwtService.getToken()!)) {
+      this.jwtService.connectStatut();
+      this.username = this.jwtService.getUser().username;
+      this.checkConnectStatue = this.jwtService.currentSatue.subscribe(x=> {
+        this.isConnected = x;
+      })
+    }
+
+  }
+
+
+  ngOnDestroy() {
+    this.checkConnectStatue!.unsubscribe();
+  }
+
+  logout() {
+    this.jwtService.signOut()
+    this.isConnected = false;
+    window.location.reload();
+  }
 }

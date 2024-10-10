@@ -25,7 +25,7 @@
               cdkDropList
               (cdkDropListDropped)="drop($event)"
             >
-            <div class="taskboard-task" cdkDrag></div>
+            <!-- <div class="taskboard-task" cdkDrag></div> -->
               @for(task of todos; track task.title) {
               <div class="taskboard-task" cdkDrag>
                 <div class="f-s-16 m-b-4 f-w-600">{{ task.title }}</div>
