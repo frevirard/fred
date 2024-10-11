@@ -34,16 +34,16 @@ export interface Employee {
   id?: number;
   nom: string;
   prenoms: string;
-  avatar:string;
-  pole:string;
-  statu:String;
+  avatar: string;
+  pole: string;
+  statu: String;
   dateInterco: Date;
   email: string;
   mobile: number;
   carence: string;
   posteOccupe: string;
   projets: number;
-  nomComplet:string;
+  nomComplet: string;
 }
 
 
@@ -61,14 +61,14 @@ export interface Employee {
     DatePipe,
     CommonModule
   ],
-  providers: [DatePipe , { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [DatePipe, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
 })
-export class AppEmployeeComponent implements AfterViewInit,OnInit {
+export class AppEmployeeComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
   loading: boolean = true;
-  employees:Employee[] = []
+  employees: Employee[] = []
   displayedColumns: string[] = [
     'nom',
     'statu',
@@ -83,25 +83,44 @@ export class AppEmployeeComponent implements AfterViewInit,OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
 
-  constructor(public dialog: MatDialog, public datePipe: DatePipe ,private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, private _bottomSheet: MatBottomSheet,
-    private http: HttpClient,private jwt:TokenStorageService) {}
+  constructor(public dialog: MatDialog,
+    public datePipe: DatePipe,
+    private _snackBar: MatSnackBar,
+    private http: HttpClient,
+    private jwt: TokenStorageService) { }
+
   ngOnInit(): void {
     this.loading = true
     this.jwt.logInCheck();
-    this.http.get<Employee[]>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/getAll" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
-      'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
-          next: (x) => { this.employees= x; this.loading = false ; this.dataSource = new MatTableDataSource(this.employees);},
-          error: (err) => {
-            console.log(err);
-            this.loading = false;
-            this._snackBar.open("Echec Récupération liste", "502", {
-              duration: 2000
-            })
+    this.http.get<Employee[]>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/getAll", {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + this.jwt.getToken()
+      })
+    }).subscribe({
+      next: (x) => {
+        this.employees = x.sort((a, b) => {
+          if (a.nom < b.nom) {
+            return -1;
           }
+          if (a.nom > b.nom) {
+            return 1;
+          }
+          return 0;
+        });
+        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource.paginator = this.paginator;
+        this.loading = false;
+      },
+
+      error: (err) => {
+        this.loading = false;
+        this._snackBar.open("Echec Récupération liste", "502", {
+          duration: 2000
         })
       }
-
-
+    })
+  }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -119,26 +138,29 @@ export class AppEmployeeComponent implements AfterViewInit,OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
         this.addRowData(result.data);
+        // this.employees.push(result.data);
       } else if (result.event === 'Update') {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
         this.deleteRowData(result.data);
       }
+      // this.dataSource = new MatTableDataSource(this.employees);
+      this.dataSource.paginator = this.paginator;
     });
   }
 
   // tslint:disable-next-line - Disables all
   addRowData(row_obj: Employee): void {
     this.dataSource.data.unshift({
-      id:row_obj.id,
+      id: row_obj.id,
       nom: row_obj.nom,
       prenoms: row_obj.prenoms,
-      avatar:row_obj.avatar,
-      pole:row_obj.pole,
-      statu:row_obj.statu,
-      dateInterco:row_obj.dateInterco,
+      avatar: row_obj.avatar,
+      pole: row_obj.pole,
+      statu: row_obj.statu,
+      dateInterco: row_obj.dateInterco,
       mobile: row_obj.mobile,
-      email:row_obj.email,
+      email: row_obj.email,
       carence: row_obj.carence,
       posteOccupe: row_obj.posteOccupe,
       projets: row_obj.projets,
@@ -154,43 +176,45 @@ export class AppEmployeeComponent implements AfterViewInit,OnInit {
     this.dataSource.data = this.dataSource.data.filter((value: any) => {
       if (value.id === row_obj.id) {
         value.nom = row_obj.nom;
-        value.prenoms= row_obj.prenoms;
-        value.avatar=row_obj.avatar;
-        value.pole=row_obj.pole;
+        value.prenoms = row_obj.prenoms;
+        value.avatar = row_obj.avatar;
+        value.pole = row_obj.pole;
         value.statu = row_obj.statu;
-        value.dateInterco =row_obj.dateInterco;
-        value.mobile= row_obj.mobile;
-        value.email=row_obj.email;
-        value.carence= row_obj.carence;
-        value.posteOccupe= row_obj.posteOccupe;
-        value.projets= row_obj.projets;
-        value.nomComplet= row_obj.nomComplet;
+        value.dateInterco = row_obj.dateInterco;
+        value.mobile = row_obj.mobile;
+        value.email = row_obj.email;
+        value.carence = row_obj.carence;
+        value.posteOccupe = row_obj.posteOccupe;
+        value.projets = row_obj.projets;
+        value.nomComplet = row_obj.nomComplet;
       }
+
       return true;
     });
   }
 
   // tslint:disable-next-line - Disables all
   deleteRowData(row_obj: Employee): boolean | any {
+    console.log(row_obj)
+    this.http.delete<String>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/delete/" + row_obj.id, {
+      headers: new HttpHeaders({
+        'Content-Type': '',
+        'Authorization': "Bearer " + this.jwt.getToken()
+      })
+    }).subscribe({
+      next: (x) => {
+        this.dataSource.data = this.dataSource.data.filter((value: any) => {
+          return value.id !== row_obj.id;
+        });
+      },
+      error: (err) => {
+        console.log(err);
 
-    this.http.delete<String>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/delete/" + row_obj.id ,{headers:new HttpHeaders({ 'Content-Type': '' ,
-      'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
-          next: (x) => {
-            this.dataSource.data = this.dataSource.data.filter((value: any) => {
-              return value.id !== row_obj.id;
-            });
-          },
-          error: (err) => {
-            console.log(err);
-
-            this._snackBar.open("Echec Suppression", "502", {
-              duration: 2000
-            })
-          }
+        this._snackBar.open("Echec Suppression", "502", {
+          duration: 2000
         })
-
-
-
+      }
+    })
   }
 }
 
@@ -210,9 +234,9 @@ export class AppEmployeeDialogContentComponent implements OnInit {
   // tslint:disable-next-line - Disables all
   local_data: any;
   selectedImage: any = '';
-  avatars:any[] = ['assets/images/profile/user-1.jpg','assets/images/profile/user-2.jpg','assets/images/profile/user-3.jpg'
-    ,'assets/images/profile/user-4.jpg','assets/images/profile/user-5.jpg','assets/images/profile/user-6.jpg','assets/images/profile/user-7.jpg',
-    'assets/images/profile/user-8.jpg','assets/images/profile/user-9.jpg','assets/images/profile/user-10.jpg'
+  avatars: any[] = ['assets/images/profile/user-1.jpg', 'assets/images/profile/user-2.jpg', 'assets/images/profile/user-3.jpg'
+    , 'assets/images/profile/user-4.jpg', 'assets/images/profile/user-5.jpg', 'assets/images/profile/user-6.jpg', 'assets/images/profile/user-7.jpg',
+    'assets/images/profile/user-8.jpg', 'assets/images/profile/user-9.jpg', 'assets/images/profile/user-10.jpg'
   ]
   filteredsAvatar: Observable<any[]>;
   stateCtrl = new FormControl('');
@@ -220,7 +244,7 @@ export class AppEmployeeDialogContentComponent implements OnInit {
   constructor(
     public datePipe: DatePipe,
     private _snackBar: MatSnackBar, private _bottomSheet: MatBottomSheet,
-    private http: HttpClient,private jwt:TokenStorageService,
+    private http: HttpClient, private jwt: TokenStorageService,
     public dialogRef: MatDialogRef<AppEmployeeDialogContentComponent>,
     // @Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Employee
@@ -242,7 +266,7 @@ export class AppEmployeeDialogContentComponent implements OnInit {
 
 
   ngOnInit(): void {
-     this.jwt.logInCheck();
+    this.jwt.logInCheck();
   }
 
   public _filteredAvatar(value: string): any[] {
@@ -256,23 +280,28 @@ export class AppEmployeeDialogContentComponent implements OnInit {
   doAction(): void {
     this.local_data.nomComplet = this.local_data.nom + " " + this.local_data.prenoms;
     console.log(this.local_data);
-    this.http.post<Employee>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/add" ,this.local_data,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
-      'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
-          next: (x) => { this.local_data= x;
-                         this.dialogRef.close({ event: this.action, data: this.local_data });
-          },
-          error: (err) => {
-            console.log(err);
+    this.http.post<Employee>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/add", this.local_data, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + this.jwt.getToken()
+      })
+    }).subscribe({
+      next: (x) => {
+        this.local_data = x;
+        this.dialogRef.close({ event: this.action, data: this.local_data });
+      },
+      error: (err) => {
+        console.log(err);
 
-            this._snackBar.open("Echec ajout consultant", "502", {
-              duration: 2000
-            })
-          }
+        this._snackBar.open("Echec ajout consultant", "502", {
+          duration: 2000
         })
+      }
+    })
 
   }
 
-  updatePicture(imagePath:string) {
+  updatePicture(imagePath: string) {
     this.local_data.avatar = imagePath;
   }
 
@@ -301,3 +330,4 @@ export class AppEmployeeDialogContentComponent implements OnInit {
     };
   }
 }
+

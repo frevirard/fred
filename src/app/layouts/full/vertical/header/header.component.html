@@ -175,6 +175,7 @@
         </div>
       </div>
     </div>
+
     <div class="p-x-32 p-b-16">
       @for(profile of profiledd; track profile.title) {
       <a class="p-8 text-decoration-none d-block text-hover-primary" [routerLink]="[profile.link]">
@@ -186,10 +187,9 @@
           <span class="bg-light-error text-error rounded-sm p-x-8 p-y-4 f-w-500 f-s-12 m-l-4">5</span>
           }
         </div>
-
-
       </a>
       }
+
 
       <a class="p-8 text-decoration-none d-block text-hover-primary">
         <div class="d-flex align-items-center" (click)="logout()">

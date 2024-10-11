@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MaterialModule } from '../../../material.module';
 
 import {
@@ -12,6 +12,13 @@ import {
   ApexPlotOptions,
   NgApexchartsModule,
 } from 'ng-apexcharts';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { MatTableDataSource } from '@angular/material/table';
+import { Employee } from 'src/app/pages/apps/employee/employee.component';
+import { TokenStorageService } from 'src/app/services/tokenStorage.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Metrics } from 'src/app/objets/metrics';
+import { CommonModule } from '@angular/common';
 
 export interface yourperformanceChart {
   series: ApexAxisChartSeries;
@@ -34,17 +41,20 @@ interface performanceLists {
 @Component({
   selector: 'app-your-performance',
   standalone: true,
-  imports: [MaterialModule, NgApexchartsModule],
+  imports: [MaterialModule, NgApexchartsModule,CommonModule],
   templateUrl: './your-performance.component.html',
 })
-export class AppYourPerformanceComponent {
+export class AppYourPerformanceComponent implements OnInit {
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
   public yourperformanceChart!: Partial<yourperformanceChart> | any;
-
-  constructor() {
+  loading=true;
+totalProjet: any;
+  constructor( private http: HttpClient,
+    private jwt: TokenStorageService,
+    private _snackBar: MatSnackBar) {
     this.yourperformanceChart = {
-      series: [20, 20, 20, 20, 20],
-      labels: ['245', '45', '14', '78', '95'],
+      series: [],
+      labels: ['Clôturés', 'En Cours', 'Ouverts'],
       chart: {
         type: 'donut',
         height: 205,
@@ -90,28 +100,61 @@ export class AppYourPerformanceComponent {
       ],
     };
   }
+  ngOnInit(): void {
+    this.loading = true
+    this.jwt.logInCheck();
+    this.http.get<Metrics>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/metrics/getMetrics", {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + this.jwt.getToken()
+      })
+    }).subscribe({
+      next: (x) => {
+        let perfchart:number[] = [];
+        perfchart.push(x.projetOuverts);
+        perfchart.push(x.projetsEncours);
+        perfchart.push(x.projetsCloture);
+        this.yourperformanceChart.series = perfchart;
+        this.totalProjet = x.totalProjet;
+        this.performanceLists.find(obj => obj.id === 1)!.title = x.projetOuverts + " Projet(s)";
+        this.performanceLists.find(obj => obj.id === 2)!.title = x.projetsEncours + " Projet(s)";
+        this.performanceLists.find(obj => obj.id === 3)!.title = x.projetsCloture + " Projet(s)";
+        this.loading = false;
+      },
+
+      error: (err) => {
+        this.loading = false;
+        this._snackBar.open("Echec Récupération des données", "502", {
+          duration: 2000
+        })
+      }
+    })
+  }
+
 
   performanceLists: performanceLists[] = [
     {
       id: 1,
       color: 'primary',
       icon: 'solar:shop-2-linear',
-      title: '7 Projets',
-      subtext: 'En cours',
+      title: '- Projets',
+      subtext: 'Ouvert(s)',
     },
     {
       id: 2,
       color: 'error',
       icon: 'solar:filters-outline',
-      title: '4 Projets',
-      subtext: 'En attente',
+      title: '- Projets',
+      subtext: 'En Cours',
     },
     {
       id: 3,
       color: 'accent',
       icon: 'solar:pills-3-linear',
-      title: '12 Projets',
-      subtext: 'Terminés',
+      title: '- Projets',
+      subtext: 'Clôturé(s)',
     },
+
+
   ];
 }

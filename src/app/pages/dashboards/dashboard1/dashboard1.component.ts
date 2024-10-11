@@ -9,6 +9,8 @@ import { AppSalesOverviewComponent } from 'src/app/components/dashboard1/sales-o
 import { AppTotalSettlementsComponent } from 'src/app/components/dashboard1/total-settlements/total-settlements.component';
 import { AppWelcomeCardComponent } from 'src/app/components/dashboard1/welcome-card/welcome-card.component';
 import { AppYourPerformanceComponent } from 'src/app/components/dashboard1/your-performance/your-performance.component';
+import { AppNewCustomersComponent } from "../../../components/dashboard2/new-customers/new-customers.component";
+import { AppTopCardsComponent } from "../../../components/dashboard3/top-cards/top-cards.component";
 
 @Component({
   selector: 'app-dashboard1',
@@ -24,7 +26,9 @@ import { AppYourPerformanceComponent } from 'src/app/components/dashboard1/your-
     AppYourPerformanceComponent,
     AppTotalSettlementsComponent,
     AppRevenueProductComponent,
-  ],
+    AppNewCustomersComponent,
+    AppTopCardsComponent
+],
   templateUrl: './dashboard1.component.html',
 })
 export class AppDashboard1Component {

@@ -1,8 +1,11 @@
 <mat-card class="cardWithShadow">
   <mat-card-content>
     <mat-card-title>Performance</mat-card-title>
-    <mat-card-subtitle>Mois précédent</mat-card-subtitle>
-    <div class="row m-t-12">
+    <mat-card-subtitle>Globale</mat-card-subtitle>
+    <div style="display: flex;justify-content: center;">
+      <mat-spinner *ngIf="this.loading"></mat-spinner>
+    </div>
+    <div class="row m-t-12"  *ngIf="!this.loading">
       <div class="col-sm-6 m-t-4">
         @for(performanceList of performanceLists; track performanceList.title) {
         <div class="hstack align-items-center m-t-20">
@@ -40,7 +43,7 @@
             [responsive]="yourperformanceChart.responsive"
           ></apx-chart>
         </div>
-        <h2 class="f-s-30 f-w-600 mat-subtitle-1">170</h2>
+        <h2 class="f-s-30 f-w-600 mat-subtitle-1">{{totalProjet}}</h2>
         <p class="m-b-0 mat-body-1 f-s-14 m-t-4">
           Total de projet en backlog
         </p>

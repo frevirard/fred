@@ -105,13 +105,17 @@ export class AppTicketlistComponent implements OnInit {
     this.http.get<TicketElement[]>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/actions/getAll" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
           next: (x) => {
-            console.log(x)
             this.tickets= x;
-            this.totalCount = this.dataSource.data.length;
             this.dataSource = new MatTableDataSource(this.tickets);
-            this.Open = this.btnCategoryClick('Ouvert');
-            this.Closed = this.btnCategoryClick('Cloture');
-            this.Inprogress = this.btnCategoryClick('En cours');
+            this.totalCount = this.dataSource.data.length;
+            this.Open = this.getNbOccur("Ouvert",this.dataSource.data);
+            this.Closed = this.getNbOccur("Cloture",this.dataSource.data)
+            this.Inprogress = this.getNbOccur("En cours",this.dataSource.data)
+            // this.Open = this.btnCategoryClick('Ouvert');
+            // this.Closed = this.btnCategoryClick('Cloture');
+            // this.Inprogress = this.btnCategoryClick('En cours');
+            this.btnCategoryClick('');
+            this.dataSource.paginator = this.paginator;
             this.loadingBis = false;
           },
           error: (err) => {
@@ -175,11 +179,21 @@ export class AppTicketlistComponent implements OnInit {
     });
 
     this.totalCount = this.dataSource.data.length;
-    this.Open = this.btnCategoryClick('Ouvert');
-    this.Closed = this.btnCategoryClick('Cloture');
-    this.Inprogress = this.btnCategoryClick('En cours');
+    this.Open = this.getNbOccur("Ouvert",this.dataSource.data);
+    this.Closed = this.getNbOccur("Cloture",this.dataSource.data)
+    this.Inprogress = this.getNbOccur("En cours",this.dataSource.data)
     this.dataSource = new MatTableDataSource(this.tickets);
     this.table.renderRows();
+  }
+
+  getNbOccur(id:string, arr:any[]) {
+    var occurs = 0;
+
+    for (var i=0; i<arr.length; i++) {
+      if ( 'id' in arr[i] && arr[i].statu === id ) occurs++;
+    }
+
+    return occurs;
   }
 
   // tslint:disable-next-line - Disables all
@@ -201,9 +215,9 @@ export class AppTicketlistComponent implements OnInit {
       }
 
       this.totalCount = this.dataSource.data.length;
-      this.Open = this.btnCategoryClick('Ouvert');
-      this.Closed = this.btnCategoryClick('Cloture');
-      this.Inprogress = this.btnCategoryClick('En cours');
+      this.Open = this.getNbOccur("Ouvert",this.dataSource.data);
+      this.Closed = this.getNbOccur("Cloture",this.dataSource.data)
+      this.Inprogress = this.getNbOccur("En cours",this.dataSource.data)
       this.dataSource = new MatTableDataSource(this.tickets);
       return true;
     });
@@ -219,10 +233,11 @@ export class AppTicketlistComponent implements OnInit {
               return value.id !== row_obj.id;
             });
             this.totalCount = this.dataSource.data.length;
-            this.Open = this.btnCategoryClick('Ouvert');
-            this.Closed = this.btnCategoryClick('Cloture');
-            this.Inprogress = this.btnCategoryClick('En cours');
-            this.dataSource = new MatTableDataSource(this.tickets);
+            this.Open = this.getNbOccur("Ouvert",this.dataSource.data);
+            this.Closed = this.getNbOccur("Cloture",this.dataSource.data);
+            this.Inprogress = this.getNbOccur("En cours",this.dataSource.data);
+
+            // this.dataSource = new MatTableDataSource(this.tickets);
           },
           error: (err) => {
             console.log(err);
