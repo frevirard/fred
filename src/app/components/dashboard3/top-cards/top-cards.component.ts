@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Metrics } from 'src/app/objets/metrics';
 import { TokenStorageService } from 'src/app/services/tokenStorage.service';
 import { CommonModule } from '@angular/common';
+import { MesConstants } from 'src/app/services/MesConstants';
 
 interface topcards {
   id: number;
@@ -32,7 +33,7 @@ export class AppTopCardsComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true
     this.jwt.logInCheck();
-    this.http.get<Metrics>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/metrics/getMetrics", {
+    this.http.get<Metrics>(MesConstants.LOCALAHOST + "/metrics/getMetrics", {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': "Bearer " + this.jwt.getToken()

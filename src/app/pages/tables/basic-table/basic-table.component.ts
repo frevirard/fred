@@ -22,36 +22,36 @@ const PRODUCT_DATA: productsData[] = [
     imagePath: 'assets/images/profile/user-1.jpg',
     uname: 'Sunil Joshi',
     position: 'Web Designer',
-    productName: 'Elite Admin',
-    budget: 3.9,
-    priority: 'low'
+    productName: '4',
+    budget: 67,
+    priority: 'critical'
   },
   {
     id: 2,
     imagePath: 'assets/images/profile/user-2.jpg',
     uname: 'Andrew McDownland',
     position: 'Project Manager',
-    productName: 'Real Homes Theme',
-    budget: 24.5,
-    priority: 'medium'
+    productName: '3',
+    budget: 30,
+    priority: 'high'
   },
   {
     id: 3,
     imagePath: 'assets/images/profile/user-3.jpg',
     uname: 'Christopher Jamil',
     position: 'Project Manager',
-    productName: 'MedicalPro Theme',
-    budget: 12.8,
-    priority: 'high'
+    productName: '2',
+    budget: 12,
+    priority: 'medium'
   },
   {
     id: 4,
     imagePath: 'assets/images/profile/user-4.jpg',
     uname: 'Nirav Joshi',
     position: 'Frontend Engineer',
-    productName: 'Hosting Press HTML',
-    budget: 2.4,
-    priority: 'critical'
+    productName: '0',
+    budget: 0,
+    priority: 'low'
   },
 ];
 
@@ -74,7 +74,7 @@ const PROJECT_DATA: performanceData[] = [
     pname: 'Gaming Console',
     category: 'Electronics',
     progress: 78.5,
-    sales: 3.9,
+    sales: 3,
     status: 'low',
   },
   {
@@ -83,7 +83,7 @@ const PROJECT_DATA: performanceData[] = [
     pname: 'Leather Purse',
     category: 'Fashion',
     progress: 58.6,
-    sales: 3.5,
+    sales: 3,
     status: 'medium',
   },
   {
@@ -92,7 +92,7 @@ const PROJECT_DATA: performanceData[] = [
     pname: 'Red Velvate Dress',
     category: 'Womens Fashion',
     progress: 25,
-    sales: 3.8,
+    sales: 3,
     status: 'high',
   },
   {
@@ -101,7 +101,7 @@ const PROJECT_DATA: performanceData[] = [
     pname: 'Headphone Boat',
     category: 'Electronics',
     progress: 96.3,
-    sales: 3.54,
+    sales: 3,
     status: 'critical',
   },
 ];
@@ -124,7 +124,7 @@ const PAYMENT_DATA: paymentData[] = [
     imagePath: 'assets/images/svgs/icon-paypal.svg',
     pname: 'Paypal',
     category: 'Big Brands',
-    price: 6235,
+    price: 62,
   },
   {
     id: 2,
@@ -132,7 +132,7 @@ const PAYMENT_DATA: paymentData[] = [
     imagePath: 'assets/images/svgs/icon-office-bag.svg',
     pname: 'Wallet',
     category: 'Bill payment',
-    price: 345,
+    price: 34,
   },
   {
     id: 3,
@@ -140,7 +140,7 @@ const PAYMENT_DATA: paymentData[] = [
     imagePath: 'assets/images/svgs/icon-master-card.svg',
     pname: 'Credit Card',
     category: 'Money reversed',
-    price: 2235,
+    price: 22,
   },
   {
     id: 4,
@@ -163,7 +163,7 @@ export interface Element {
 }
 
 const BASIC_DATA: Element[] = [
-  { 
+  {
     imgSrc: 'assets/images/profile/user-1.jpg',
     name: 'Micheal Doe',
     post: 'Web Designer',
@@ -172,7 +172,7 @@ const BASIC_DATA: Element[] = [
     color: 'success',
     budget: '3.9'
    },
-   { 
+   {
     imgSrc: 'assets/images/profile/user-2.jpg',
     name: 'Andrew McDownland',
     post: 'Project Manager',
@@ -181,7 +181,7 @@ const BASIC_DATA: Element[] = [
     color: 'warning',
     budget: '3.9'
    },
-   { 
+   {
     imgSrc: 'assets/images/profile/user-3.jpg',
     name: 'Christopher Jamil',
     post: 'Frontend Engineer',
@@ -190,7 +190,7 @@ const BASIC_DATA: Element[] = [
     color: 'error',
     budget: '3.9'
    },
-   { 
+   {
     imgSrc: 'assets/images/profile/user-4.jpg',
     name: 'Mathew Anderson',
     post: 'Content Writer',
@@ -211,7 +211,7 @@ const BASIC_DATA: Element[] = [
 export class AppBasicTableComponent implements OnInit {
 
   // table 4
-  
+
   displayedColumns4 = ['name', 'pname', 'status', 'budget'];
   dataSource4 = new MatTableDataSource<Element>(BASIC_DATA);
 

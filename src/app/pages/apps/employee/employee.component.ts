@@ -26,6 +26,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TokenStorageService } from 'src/app/services/tokenStorage.service';
 import { AuthInterceptor } from 'src/app/services/AuthInterceptor.interceptor';
 import { Observable, startWith, map } from 'rxjs';
+import { MesConstants } from 'src/app/services/MesConstants';
 
 
 
@@ -44,6 +45,7 @@ export interface Employee {
   posteOccupe: string;
   projets: number;
   nomComplet: string;
+  nbJourInterco:number;
 }
 
 
@@ -92,7 +94,7 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.loading = true
     this.jwt.logInCheck();
-    this.http.get<Employee[]>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/getAll", {
+    this.http.get<Employee[]>(MesConstants.LOCALAHOST +"/employee/getAll", {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': "Bearer " + this.jwt.getToken()
@@ -165,6 +167,7 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
       posteOccupe: row_obj.posteOccupe,
       projets: row_obj.projets,
       nomComplet: row_obj.nomComplet,
+      nbJourInterco: row_obj.nbJourInterco,
 
     });
     this.dialog.open(AppAddEmployeeComponent);
@@ -187,6 +190,7 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
         value.posteOccupe = row_obj.posteOccupe;
         value.projets = row_obj.projets;
         value.nomComplet = row_obj.nomComplet;
+        value.nbJourInterco = row_obj.nbJourInterco;
       }
 
       return true;
@@ -196,7 +200,7 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
   // tslint:disable-next-line - Disables all
   deleteRowData(row_obj: Employee): boolean | any {
     console.log(row_obj)
-    this.http.delete<String>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/delete/" + row_obj.id, {
+    this.http.delete<String>(MesConstants.LOCALAHOST + "/employee/delete/" + row_obj.id, {
       headers: new HttpHeaders({
         'Content-Type': '',
         'Authorization': "Bearer " + this.jwt.getToken()
@@ -280,7 +284,7 @@ export class AppEmployeeDialogContentComponent implements OnInit {
   doAction(): void {
     this.local_data.nomComplet = this.local_data.nom + " " + this.local_data.prenoms;
     console.log(this.local_data);
-    this.http.post<Employee>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/add", this.local_data, {
+    this.http.post<Employee>(MesConstants.LOCALAHOST + "/employee/add", this.local_data, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': "Bearer " + this.jwt.getToken()

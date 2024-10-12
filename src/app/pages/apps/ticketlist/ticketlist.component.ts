@@ -18,6 +18,7 @@ import { State } from '../../forms/form-elements';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenStorageService } from 'src/app/services/tokenStorage.service';
 import { MatSnackBar} from '@angular/material/snack-bar';
+import { MesConstants } from 'src/app/services/MesConstants';
 
 export interface TicketElement {
   id?: number;
@@ -70,6 +71,7 @@ export class AppTicketlistComponent implements OnInit {
     'categorie',
     'assignee',
     'status',
+    'nbJour',
     'progression',
     'date',
     'action',
@@ -87,7 +89,7 @@ export class AppTicketlistComponent implements OnInit {
     this.loadingBis = true;
     this.jwt.logInCheck();
     // recuperer la liste des consultants
-    this.http.get<Employee[]>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/employee/getAll" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
+    this.http.get<Employee[]>(MesConstants.LOCALAHOST + "/employee/getAll" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
           next: (x) => { this.employees= x;
             this.loading = false;
@@ -102,7 +104,7 @@ export class AppTicketlistComponent implements OnInit {
         })
 
     // recuperer la liste des actions
-    this.http.get<TicketElement[]>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/actions/getAll" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
+    this.http.get<TicketElement[]>(MesConstants.LOCALAHOST + "/actions/getAll" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
           next: (x) => {
             this.tickets= x;
@@ -175,7 +177,8 @@ export class AppTicketlistComponent implements OnInit {
       dateDebut: row_obj.dateDebut,
       progression: row_obj.progression,
       support: row_obj.support,
-      commentaire: row_obj.commentaire
+      commentaire: row_obj.commentaire,
+
     });
 
     this.totalCount = this.dataSource.data.length;
@@ -226,7 +229,7 @@ export class AppTicketlistComponent implements OnInit {
   // tslint:disable-next-line - Disables all
   deleteRowData(row_obj: TicketElement): boolean | any {
 
-    this.http.delete("https://mighty-spire-20794-8f2520df548f.herokuapp.com/actions/delete/" + row_obj.id ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
+    this.http.delete(MesConstants.LOCALAHOST + "/actions/delete/" + row_obj.id ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
           next: (x) => {
             this.dataSource.data = this.dataSource.data.filter((value, key) => {
@@ -318,7 +321,7 @@ export class AppTicketDialogContentComponent implements OnInit {
 
   doAction(): void {
     console.log(this.local_data);
-    this.http.post<Employee>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/actions/add" ,this.local_data,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
+    this.http.post<Employee>(MesConstants.LOCALAHOST + "/actions/add" ,this.local_data,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
           next: (x) => { this.local_data= x;
                          this.dialogRef.close({ event: this.action, data: this.local_data });

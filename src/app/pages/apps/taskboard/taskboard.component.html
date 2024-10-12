@@ -24,6 +24,7 @@
               [cdkDropListData]="todos"
               cdkDropList
               (cdkDropListDropped)="drop($event)"
+              style="min-height: 150px;"
             >
             <!-- <div class="taskboard-task" cdkDrag></div> -->
               @for(task of todos; track task.title) {
@@ -83,6 +84,7 @@
               [cdkDropListData]="inprogress"
               cdkDropList
               (cdkDropListDropped)="drop($event)"
+              style="min-height: 150px;"
             >
               @for(task of inprogress; track task.title) {
               <div class="taskboard-task" cdkDrag>
@@ -140,6 +142,7 @@
               [cdkDropListData]="onhold"
               cdkDropList
               (cdkDropListDropped)="drop($event)"
+              style="min-height: 150px;"
             >
               @for(task of onhold; track task.title) {
               <div class="taskboard-task" cdkDrag>
@@ -196,6 +199,7 @@
               [cdkDropListData]="completed"
               cdkDropList
               (cdkDropListDropped)="drop($event)"
+              style="min-height: 150px;"
             >
               @for(task of completed; track task.title) {
               <div class="taskboard-task" cdkDrag>

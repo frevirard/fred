@@ -11,6 +11,7 @@ import { AppWelcomeCardComponent } from 'src/app/components/dashboard1/welcome-c
 import { AppYourPerformanceComponent } from 'src/app/components/dashboard1/your-performance/your-performance.component';
 import { AppNewCustomersComponent } from "../../../components/dashboard2/new-customers/new-customers.component";
 import { AppTopCardsComponent } from "../../../components/dashboard3/top-cards/top-cards.component";
+import { AppBasicTableComponent } from "../../tables/basic-table/basic-table.component";
 
 @Component({
   selector: 'app-dashboard1',
@@ -27,7 +28,9 @@ import { AppTopCardsComponent } from "../../../components/dashboard3/top-cards/t
     AppTotalSettlementsComponent,
     AppRevenueProductComponent,
     AppNewCustomersComponent,
-    AppTopCardsComponent
+    AppTopCardsComponent,
+    AppBasicTableComponent,
+    AppBasicTableComponent
 ],
   templateUrl: './dashboard1.component.html',
 })
