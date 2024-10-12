@@ -274,6 +274,7 @@ export class AppTicketDialogContentComponent implements OnInit {
   assistCtrl = new FormControl('');
 
   filteredSEmployee: Observable<any[]>;
+  filteredSEmployeeBis: Observable<any[]>;
 
   constructor(
     private _snackBar: MatSnackBar,private http: HttpClient,private jwt:TokenStorageService,
@@ -286,9 +287,9 @@ export class AppTicketDialogContentComponent implements OnInit {
       map((state) => (state ? this._filteredSEmployee(state) : this.employees.slice()))
     );
 
-    this.filteredSEmployee = this.assistCtrl.valueChanges.pipe(
+    this.filteredSEmployeeBis = this.assistCtrl.valueChanges.pipe(
       startWith(''),
-      map((state) => (state ? this._filteredSEmployee(state) : this.employees.slice()))
+      map((state) => (state ? this._filteredSEmployeeBis(state) : this.employees.slice()))
     );
 
     this.local_data = { ...data.obj };
@@ -300,6 +301,14 @@ export class AppTicketDialogContentComponent implements OnInit {
   }
 
   private _filteredSEmployee(value: string): any[] {
+    const filterValue = value.toLowerCase();
+
+    return this.employees.filter((employee) =>
+      employee.nomComplet.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private _filteredSEmployeeBis(value: string): any[] {
     const filterValue = value.toLowerCase();
 
     return this.employees.filter((employee) =>

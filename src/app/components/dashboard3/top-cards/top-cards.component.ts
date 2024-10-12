@@ -32,7 +32,7 @@ export class AppTopCardsComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true
     this.jwt.logInCheck();
-    this.http.get<Metrics>("http://localhost:8080/metrics/getMetrics", {
+    this.http.get<Metrics>("https://mighty-spire-20794-8f2520df548f.herokuapp.com/metrics/getMetrics", {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': "Bearer " + this.jwt.getToken()

@@ -80,7 +80,7 @@
 
 
         <mat-autocomplete #auto3="matAutocomplete">
-          @for(employee of filteredSEmployee| async; track employee.nomComplet) {
+          @for(employee of filteredSEmployeeBis| async; track employee.nomComplet) {
           <mat-option [value]="employee.nomComplet" class="d-flex align-items-center">
             <img alt="" class="m-r-8" [src]="employee.avatar" height="25" />
 

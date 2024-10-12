@@ -111,9 +111,10 @@ totalProjet: any;
     }).subscribe({
       next: (x) => {
         let perfchart:number[] = [];
-        perfchart.push(x.projetOuverts);
-        perfchart.push(x.projetsEncours);
         perfchart.push(x.projetsCloture);
+        perfchart.push(x.projetsEncours);
+        perfchart.push(x.projetOuverts);
+
         this.yourperformanceChart.series = perfchart;
         this.totalProjet = x.totalProjet;
         this.performanceLists.find(obj => obj.id === 1)!.title = x.projetOuverts + " Projet(s)";
