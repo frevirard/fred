@@ -6,6 +6,10 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
+import { HttpClient } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TokenStorageService } from 'src/app/services/tokenStorage.service';
 
 @Component({
   selector: 'app-notes',
@@ -35,8 +39,10 @@ export class AppNotesComponent implements OnInit {
     { colorName: 'error' },
     { colorName: 'success' },
   ];
-  constructor(public noteService: NoteService) {
+  constructor(public noteService: NoteService,public dialog: MatDialog,private _snackBar: MatSnackBar,private http: HttpClient,private jwt:TokenStorageService) {
     this.notes = this.noteService.getNotes();
+
+
   }
 
   applyFilter(event: Event): void {
