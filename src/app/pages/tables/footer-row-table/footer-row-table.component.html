@@ -1,7 +1,7 @@
 <mat-card class="cardWithShadow">
   <mat-card-content>
-    <mat-card-title>Footer Row table</mat-card-title>
-    <mat-card-subtitle class="mat-body-1">total is avail at footer</mat-card-subtitle>
+    <mat-card-title>Catégorie des actions réalisées</mat-card-title>
+    <mat-card-subtitle class="mat-body-1">total disponible en bas du tableau</mat-card-subtitle>
     <div class="table-responsive">
       <table mat-table [dataSource]="transactions" class="w-100">
         <!-- Item Column -->
@@ -11,16 +11,17 @@
             *matHeaderCellDef
             class="f-w-600 mat-subtitle-1 f-s-16 p-l-0"
           >
-            Item
+            Actions
           </th>
           <td mat-cell *matCellDef="let transaction" class="p-l-0">
             <div class="d-flex align-items-center gap-12">
-              <img
+              <!-- <img
                 [src]="transaction.img"
                 alt="product"
                 width="45"
                 class="rounded"
-              />
+              /> -->
+
               <span class="f-s-16 f-w-600">{{ transaction.item }} </span>
             </div>
           </td>
@@ -34,13 +35,13 @@
             *matHeaderCellDef
             class="f-w-600 mat-subtitle-1 f-s-16"
           >
-            Cost
+            Nombre
           </th>
           <td mat-cell *matCellDef="let transaction">
-            {{ transaction.cost | currency }}
+            {{ transaction.cost  }}
           </td>
           <td mat-footer-cell *matFooterCellDef>
-            {{ getTotalCost() | currency }}
+            {{ getTotalCost() }}
           </td>
         </ng-container>
 

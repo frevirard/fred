@@ -83,6 +83,7 @@ export class AppNotesComponent implements OnInit {
       color: this.clrName,
       title: 'this is New notes',
       datef: new Date(),
+      auteur:''
     });
   }
 }

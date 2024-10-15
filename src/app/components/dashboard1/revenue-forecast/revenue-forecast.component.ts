@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MaterialModule } from '../../../material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import {
@@ -13,6 +13,10 @@ import {
   NgApexchartsModule,
   ApexFill,
 } from 'ng-apexcharts';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TokenStorageService } from 'src/app/services/tokenStorage.service';
+import { MesConstants } from 'src/app/services/MesConstants';
 
 export interface revenueForecastChart {
   series: ApexAxisChartSeries;
@@ -31,25 +35,31 @@ export interface revenueForecastChart {
   imports: [MaterialModule, TablerIconsModule, NgApexchartsModule],
   templateUrl: './revenue-forecast.component.html',
 })
-export class AppRevenueForecastComponent {
+export class AppRevenueForecastComponent implements OnInit {
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
   public revenueForecastChart!: Partial<revenueForecastChart> | any;
 
-  constructor() {
+  loading = true;
+
+  anneeun:string;
+  anneedeux:string;
+  anneetrois:string;
+
+  constructor(private _snackBar: MatSnackBar,private http: HttpClient,private jwt:TokenStorageService) {
     this.revenueForecastChart = {
       series: [
         {
           name: '2023',
-          data: [50, 60, 30, 55, 75, 60, 100, 120,12,20,14,20],
+          data: [0,0,0,0,0,0,0,0,0,0,0,0],
         },
 
         {
           name: '2022',
-          data: [35, 45, 40, 50, 35, 55, 40, 45,2,10,10,18]
+          data: [0,0,0,0,0,0,0,0,0,0,0,0]
         },
         {
           name: '2024',
-          data: [100, 75, 80, 40, 20, 40, 0, 25],
+          data: [0,0,0,0,0,0,0,0,0,0,0,0],
         },
       ],
 
@@ -124,5 +134,26 @@ export class AppRevenueForecastComponent {
         },
       },
     };
+  }
+  ngOnInit(): void {
+    this.loading = true;
+    this.jwt.logInCheck();
+    // recuperer la liste des consultants
+    this.http.get<any[]>(MesConstants.LOCALAHOST + "/metrics/historique" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
+      'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
+          next: (x) => { this.revenueForecastChart.series= x;
+            this.anneeun = x[1].name;
+            this.anneedeux = x[0].name;
+            this.anneetrois = x[2].name;
+            this.loading = false;
+          },
+          error: (err) => {
+            console.log(err);
+            this.loading = false;
+            this._snackBar.open("Echec Récupération historique des projets", "502", {
+              duration: 2000
+            })
+          }
+        });
   }
 }

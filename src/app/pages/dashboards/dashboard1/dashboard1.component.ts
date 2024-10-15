@@ -12,6 +12,7 @@ import { AppYourPerformanceComponent } from 'src/app/components/dashboard1/your-
 import { AppNewCustomersComponent } from "../../../components/dashboard2/new-customers/new-customers.component";
 import { AppTopCardsComponent } from "../../../components/dashboard3/top-cards/top-cards.component";
 import { AppBasicTableComponent } from "../../tables/basic-table/basic-table.component";
+import { AppFooterRowTableComponent } from "../../tables/footer-row-table/footer-row-table.component";
 
 @Component({
   selector: 'app-dashboard1',
@@ -30,7 +31,8 @@ import { AppBasicTableComponent } from "../../tables/basic-table/basic-table.com
     AppNewCustomersComponent,
     AppTopCardsComponent,
     AppBasicTableComponent,
-    AppBasicTableComponent
+    AppBasicTableComponent,
+    AppFooterRowTableComponent
 ],
   templateUrl: './dashboard1.component.html',
 })
