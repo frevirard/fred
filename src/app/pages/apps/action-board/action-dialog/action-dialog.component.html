@@ -1,0 +1,122 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title><strong>{{action}}</strong></h2>
+
+@if(action !== 'Delete') {
+<mat-dialog-content style="max-width: 600px">
+  <form #userForm="ngForm">
+    <div class="d-flex align-items-center m-b-16">
+
+
+
+
+      <!-- <div class="col-lg-6" style="margin-top: 20px;"> -->
+        <!--
+        <mat-form-field appearance="outline" class="w-100">
+           <mat-label>Avatar</mat-label>
+          <input
+
+
+          type="text" matInput required id="nom" name="avatar"
+
+          placeholder="Avatar"
+          />
+       </mat-form-field> -->
+
+        <!-- <mat-autocomplete #auto3="matAutocomplete">
+          @for(avatar of avatars; track avatar) {
+          <mat-option (click)="updatePicture(avatar)"
+            [value]="avatar"
+            class="d-flex align-items-center"
+          >
+            <img alt="" class="m-r-8" [src]="avatar" height="25" />
+
+            <span>Choisir</span> |
+            <small>avatar</small>
+          </mat-option>
+          }
+        </mat-autocomplete> -->
+      <!-- </div> -->
+
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Titre</mat-label>
+          <input type="text" matInput required id="nom" name="nom" [(ngModel)]="local_data.titre" placeholder="Titre" />
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Détails</mat-label>
+          <input type="text" matInput required id="prenoms" name="prenoms" placeholder="Détails"
+            [(ngModel)]="local_data.description" />
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Donneur d'ordre</mat-label>
+          <input type="text" [matAutocomplete]="auto2"
+           matInput required id="prenoms" name="prenoms" placeholder="Donneur d'ordre"
+            [(ngModel)]="local_data.donneurOrdre" [formControl]="stateCtrl"/>
+        </mat-form-field>
+
+        <mat-autocomplete #auto2="matAutocomplete">
+          @for(donneur of filteredDonneur| async; track donneur.nomComplet) {
+          <mat-option [value]="donneur.nomComplet" class="d-flex align-items-center">
+            <img alt="" class="m-r-8" [src]="donneur.avatar" height="25" />
+            <span>{{ donneur.nomComplet}} </span> |
+            <small>Pôle: {{ donneur.pole }}</small>
+          </mat-option>
+          }
+        </mat-autocomplete>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Catégorie</mat-label>
+            <select matNativeControl required name="categorie" [(ngModel)]="local_data.categorie">
+              <option value="Projet">Projet</option>
+              <option value="Formation">Formation</option>
+              <option value="IT">IT</option>
+              <option value="Association">Association</option>
+              <option value="Commerciale">Commerciale</option>
+              <option value="Urgence">Urgence</option>
+              <option value="Autre">Autre</option>
+            </select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-12">
+        <mat-card-content class="b-t-1">
+          <mat-slide-toggle color="primary" [(ngModel)]="local_data.notification" name="notification">Être notifié par Mail</mat-slide-toggle>
+        </mat-card-content>
+      </div>
+
+      <!-- <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="text" matInput required id="salary" name="salary" [(ngModel)]="local_data.Salary"
+            placeholder="Pôle" />
+        </mat-form-field>
+      </div> -->
+
+    </div>
+    <button mat-flat-button (click)="doAction()" mat-flat-button color="primary" [disabled]="!userForm.valid">
+      Enregistrer
+    </button>
+    <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+      Retour
+    </button>
+  </form>
+</mat-dialog-content>
+} @else {
+<div class="p-x-24">
+  <p>Voulez-vous poursuivre ? <span class="f-w-600"> </span> ?</p>
+</div>
+<div mat-dialog-actions class="p-x-24 p-b-24">
+  <button mat-button (click)="doAction()" mat-flat-button color="warn">
+    Enregistrer
+  </button>
+  <button mat-button (click)="closeDialog()" class="m-l-8">Cancel</button>
+</div>
+}

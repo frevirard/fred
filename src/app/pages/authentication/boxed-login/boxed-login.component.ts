@@ -7,12 +7,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TokenStorageService } from 'src/app/services/tokenStorage.service';
 import { Utilisateur } from 'src/app/services/authent/utilisateur';
 import { AuthentServiceService } from 'src/app/services/authent-service.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-boxed-login',
   standalone: true,
-  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule],
+  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule,CommonModule],
   templateUrl: './boxed-login.component.html',
+  styleUrls: ['./boxed-login.component.scss'],
 })
 export class AppBoxedLoginComponent {
   options = this.settings.getOptions();
@@ -22,7 +24,10 @@ export class AppBoxedLoginComponent {
   utilisateur:Utilisateur = {
     userName: '',
     passWord: '',
-    email: ''
+    email: '',
+    nom:'',
+    prenom:'',
+    avatar:''
   }
   isLoggedIn = false;
   isLoginFailed = false;
@@ -51,9 +56,11 @@ export class AppBoxedLoginComponent {
 
     this.authService.login(this.utilisateur).subscribe(
       (      data: any) => {
-        console.log(data)
         this.tokenStorage.saveToken(data.jwt);
         this.utilisateur.userName = data.userName;
+        this.utilisateur.nom = data.nom;
+        this.utilisateur.prenom = data.prenoms;
+        this.utilisateur.avatar = data.avatar;
         this.utilisateur.passWord = "";
         this.tokenStorage.saveUser(this.utilisateur);
         this.tokenStorage.connectStatut();
@@ -63,7 +70,8 @@ export class AppBoxedLoginComponent {
         this.isLoggedIn = true;
         this._snackBar.open("Connecté", "", { duration: 2000 })
         this.roles = this.tokenStorage.getUser().roles;
-        this.router.navigate(['/dashboards/dashboard1']);
+        this.delayedFunction();
+        // this.router.navigate(['/dashboards/dashboard1']);
 
       },
       (      err: { error: { message: string; }; }) => {
@@ -78,4 +86,12 @@ export class AppBoxedLoginComponent {
     window.location.reload();
   }
 
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async  delayedFunction() {
+    await this.delay(1500); // wait for 2 seconds
+    this.router.navigate(['/dashboards/dashboard1']);
+  }
 }

@@ -56,6 +56,7 @@ interface apps {
     MaterialModule,
   ],
   templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit {
@@ -99,7 +100,11 @@ export class HeaderComponent implements OnInit {
   ];
   checkConnectStatue: Subscription | undefined;
   isConnected:boolean =false;
-  username:string = ''
+  username:string = '';
+  nom:string = '';
+  prenom:string = '';
+  avatar:string = '';
+
 
 
   constructor(
@@ -117,6 +122,9 @@ export class HeaderComponent implements OnInit {
       this.jwtService.connectStatut();
       this.jwtService.getToken;
       this.username = this.jwtService.getUser().userName;
+      this.nom = this.jwtService.getUser().nom;
+      this.prenom = this.jwtService.getUser().prenom;
+      this.avatar = this.jwtService.getUser().avatar;
 
       this.checkConnectStatue = this.jwtService.currentSatue.subscribe(x=> {
         this.isConnected = x;
@@ -220,11 +228,12 @@ export class HeaderComponent implements OnInit {
     //   title: ' Account Settings',
     //   link: '/',
     // },
-    //  {
-    //    id: 5,
-    //    title: 'Déconnexion',
-    //    link: '/authentication/boxed-login',
-    //  },
+      // {
+      //   id: 5,
+      //   title: 'Déconnexion',
+      //   link: '/authentication/boxed-login',
+      // },
+
   ];
 
   apps: apps[] = [

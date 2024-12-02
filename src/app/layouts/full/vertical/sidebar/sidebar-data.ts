@@ -63,6 +63,12 @@ export const navItems: NavItem[] = [
     iconName: 'solar:ticket-sale-line-duotone',
     route: 'apps/tickets',
   },
+  {
+    displayName: 'BackLog',
+    iconName: 'solar:ticket-sale-line-duotone',
+    route: 'apps/actionBoard',
+  },
+
   // {
   //   displayName: 'Invoice',
   //   iconName: 'solar:bill-list-line-duotone',

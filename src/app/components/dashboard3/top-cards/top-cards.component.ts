@@ -62,21 +62,21 @@ export class AppTopCardsComponent implements OnInit {
     {
       id: 1,
       color: 'primary',
-      icon: 'ic:outline-other-houses',
+      icon: 'material-symbols:finance-mode-rounded',
       title: 'Transf. Fin',
       subtitle: '0 Projet(s)',
     },
     {
       id: 2,
       color: 'warning',
-      icon: 'ic:outline-other-houses',
+      icon: 'oui:app-reporting',
       title: 'Conso & Report',
       subtitle: '0 Projet(s)',
     },
     {
       id: 3,
       color: 'accent',
-      icon: 'ic:outline-other-houses',
+      icon: 'qlementine-icons:money-16',
       title: 'Compta- Fisc',
       subtitle: '0 Projet(s)',
     }
@@ -86,14 +86,14 @@ export class AppTopCardsComponent implements OnInit {
     {
       id: 1,
       color: 'error',
-      icon: 'ic:outline-other-houses',
+      icon: 'fluent-mdl2:manager-self-service',
       title: 'Financial Services',
       subtitle: '0 Projet(s)',
     },
     {
       id: 2,
       color: 'success',
-      icon: 'ic:outline-other-houses',
+      icon: 'eos-icons:performance',
       title: 'Pilotage & Performance',
       subtitle: '0 Projet(s)',
     },

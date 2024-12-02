@@ -2,7 +2,8 @@ export interface Metrics {
 
    id?:number,
    projetsEncours:number,
-   projetOuverts:number,
+   projetsOuverts:number,
+   projetsPause:number,
    projetsCloture:number,
    projetsTF:number,
    projetsRisque:number,

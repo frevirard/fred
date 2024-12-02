@@ -19,6 +19,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenStorageService } from 'src/app/services/tokenStorage.service';
 import { MatSnackBar} from '@angular/material/snack-bar';
 import { MesConstants } from 'src/app/services/MesConstants';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 export interface TicketElement {
   id?: number;
@@ -49,9 +50,13 @@ export interface TicketElement {
     TablerIconsModule,
     MatNativeDateModule,
     MatDatepickerModule,
+    CommonModule,
+    MatSortModule
   ],
 })
 export class AppTicketlistComponent implements OnInit {
+
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
@@ -77,9 +82,11 @@ export class AppTicketlistComponent implements OnInit {
     'action',
   ];
 
+  @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource(this.tickets);
   loading = true;
   loadingBis = true;
+  actions: any[] = [];
 
 
   constructor(public dialog: MatDialog,private _snackBar: MatSnackBar,private http: HttpClient,private jwt:TokenStorageService) {}
@@ -91,7 +98,8 @@ export class AppTicketlistComponent implements OnInit {
     // recuperer la liste des consultants
     this.http.get<Employee[]>(MesConstants.LOCALAHOST + "/employee/getAll" ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
-          next: (x) => { this.employees= x;
+          next: (x) => {
+            this.employees= x;
             this.loading = false;
           },
           error: (err) => {
@@ -118,12 +126,41 @@ export class AppTicketlistComponent implements OnInit {
             // this.Inprogress = this.btnCategoryClick('En cours');
             this.btnCategoryClick('');
             this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
             this.loadingBis = false;
           },
           error: (err) => {
             console.log(err);
             this.loadingBis = false;
             this._snackBar.open("Echec Récupération liste des tickets", "502", {
+              duration: 2000
+            })
+          }
+        })
+
+
+        this.http.get<any[]>(MesConstants.LOCALAHOST +"/action/getAll", {
+          headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + this.jwt.getToken()
+          })
+        }).subscribe({
+          next: (x) => {
+            this.actions= x.sort((a, b) => {
+              if (a.titre < b.titre) {
+                return -1;
+              }
+              if (a.titre > b.titre) {
+                return 1;
+              }
+              return 0;
+            });
+            // this.loading = false;
+          },
+
+          error: (err) => {
+            // this.loading = false;
+            this._snackBar.open("Echec Récupération liste", "502", {
               duration: 2000
             })
           }
@@ -146,9 +183,10 @@ export class AppTicketlistComponent implements OnInit {
 
   openDialog(action: string, obj: any): void {
     let employees = this.employees
+    let actions= this.actions
     obj.action = action;
     const dialogRef = this.dialog.open(AppTicketDialogContentComponent, {
-      data: { obj, employees }
+      data: { obj, employees ,actions },autoFocus:false
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -185,8 +223,9 @@ export class AppTicketlistComponent implements OnInit {
     this.Open = this.getNbOccur("Ouvert",this.dataSource.data);
     this.Closed = this.getNbOccur("Cloture",this.dataSource.data)
     this.Inprogress = this.getNbOccur("En cours",this.dataSource.data)
-    this.dataSource = new MatTableDataSource(this.tickets);
+    //this.dataSource = new MatTableDataSource(this.tickets);
     this.table.renderRows();
+    this.dataSource.paginator = this.paginator;
   }
 
   getNbOccur(id:string, arr:any[]) {
@@ -221,7 +260,7 @@ export class AppTicketlistComponent implements OnInit {
       this.Open = this.getNbOccur("Ouvert",this.dataSource.data);
       this.Closed = this.getNbOccur("Cloture",this.dataSource.data)
       this.Inprogress = this.getNbOccur("En cours",this.dataSource.data)
-      this.dataSource = new MatTableDataSource(this.tickets);
+      //this.dataSource = new MatTableDataSource(this.tickets);
       return true;
     });
   }
@@ -272,12 +311,15 @@ export class AppTicketDialogContentComponent implements OnInit {
   // tslint:disable-next-line - Disables all
   local_data: any;
   employees:any[];
+  actions:any[];
 
   stateCtrl = new FormControl('');
   assistCtrl = new FormControl('');
+  actionCtrl = new FormControl('');
 
   filteredSEmployee: Observable<any[]>;
   filteredSEmployeeBis: Observable<any[]>;
+  filteredAction: Observable<any[]>;
 
   constructor(
     private _snackBar: MatSnackBar,private http: HttpClient,private jwt:TokenStorageService,
@@ -295,12 +337,19 @@ export class AppTicketDialogContentComponent implements OnInit {
       map((state) => (state ? this._filteredSEmployeeBis(state) : this.employees.slice()))
     );
 
+    this.filteredAction = this.actionCtrl.valueChanges.pipe(
+      startWith(''),
+      map((state) => (state ? this._filteredActions(state) : this.actions.slice()))
+    );
+
     this.local_data = { ...data.obj };
     this.employees = data.employees;
+    this.actions = data.actions;
     this.action = this.local_data.action;
+    console.log(this.local_data);
   }
   ngOnInit(): void {
-    console.log(this.local_data)
+
   }
 
   private _filteredSEmployee(value: string): any[] {
@@ -319,8 +368,19 @@ export class AppTicketDialogContentComponent implements OnInit {
     );
   }
 
+  private _filteredActions(value: string): any[] {
+    const filterValue = value.toLowerCase();
+    console.log("filtered actions");
+    return this.actions.filter((x) =>
+      x.titre.toLowerCase().includes(filterValue)
+    );
+  }
+
   doAction(): void {
     console.log(this.local_data);
+    if(this.local_data.progression == 100) {
+      this.local_data.statu = "Cloture";
+    }
     this.http.post<Employee>(MesConstants.LOCALAHOST + "/actions/add" ,this.local_data,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
       'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
           next: (x) => { this.local_data= x;
@@ -329,7 +389,7 @@ export class AppTicketDialogContentComponent implements OnInit {
           error: (err) => {
             console.log(err);
 
-            this._snackBar.open("Echec ajout consultant", "502", {
+            this._snackBar.open("Echec ajout Action", "502", {
               duration: 2000
             })
           }
@@ -340,6 +400,11 @@ export class AppTicketDialogContentComponent implements OnInit {
   updatePicture(employee:any) {
     this.local_data.pole = employee.pole
     this.local_data.imgSrc = employee.avatar;
+  }
+
+  updateProgression(action:any) {
+    this.local_data.details = action.description
+    this.local_data.categorie = action.categorie
   }
 
   closeDialog(): void {

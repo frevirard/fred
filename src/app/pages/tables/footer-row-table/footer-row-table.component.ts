@@ -12,6 +12,8 @@ export interface Transaction {
   item: string;
   img: string;
   cost: number;
+  moyenne:number;
+  color:string
 }
 @Component({
   selector: 'app-footer-row-table',
@@ -21,15 +23,15 @@ export interface Transaction {
   styleUrls: ['./footer-row-table.component.scss'],
 })
 export class AppFooterRowTableComponent implements OnInit {
-  displayedColumns: string[] = ['item', 'cost'];
+  displayedColumns: string[] = ['item', 'cost','average'];
   transactions: Transaction[] = [
-    { img: '/assets/images/products/s1.jpg', item: 'Projet', cost: 0 },
-    { img: '/assets/images/products/s2.jpg', item: 'Formation', cost: 0 },
-    { img: '/assets/images/products/s3.jpg', item: 'IT', cost: 0 },
-    { img: '/assets/images/products/s4.jpg', item: 'Association', cost: 0 },
-    { img: '/assets/images/products/s5.jpg', item: 'Commerciale', cost: 0 },
-    { img: '/assets/images/products/s6.jpg', item: 'Urgence', cost: 0 },
-    { img: '/assets/images/products/s6.jpg', item: 'Autre', cost: 0 },
+    { img: 'eos-icons:project-outlined', item: 'Projet', cost: 0,moyenne:0, color:"primary" },
+    { img: 'streamline:global-learning', item: 'Formation', cost: 0,moyenne:0,color:"error"  },
+    { img: 'healthicons:healthcare-it', item: 'IT', cost: 0 ,moyenne:0,color:"accent" },
+    { img: 'solar:help-bold', item: 'Association', cost: 0 ,moyenne:0,color:"warning" },
+    { img: 'gg:phone', item: 'Commerciale', cost: 0,moyenne:0 ,color:"primary" },
+    { img: 'material-symbols:e911-emergency-outline', item: 'Urgence', cost: 0 ,moyenne:0 ,color:"error"},
+    { img: 'basil:other-1-outline', item: 'Autre', cost: 0 ,moyenne:0 ,color:"accent"},
   ];
   loading: boolean;
 
@@ -47,7 +49,6 @@ export class AppFooterRowTableComponent implements OnInit {
     this.jwt.logInCheck();
     // recuperer la liste des consultants
     this.transactions.forEach(transaction=> {
-      console.log(MesConstants.LOCALAHOST + "/metrics/nbCategorie/" + transaction.item );
       this.http.get<number>(MesConstants.LOCALAHOST + "/metrics/nbCategorie/" + transaction.item ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
         'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
             next: (x) => {
@@ -56,7 +57,23 @@ export class AppFooterRowTableComponent implements OnInit {
             error: (err) => {
               console.log(err);
               this.loading = false;
-              this._snackBar.open("Echec Récupération liste des consultants", "502", {
+              this._snackBar.open("Echec Récupération nombre par catégorie", "502", {
+                duration: 2000
+              })
+            }
+          })
+    })
+
+    this.transactions.forEach(transaction=> {
+      this.http.get<number>(MesConstants.LOCALAHOST + "/metrics/moyenneTempsCategorie/" + transaction.item ,{headers:new HttpHeaders({ 'Content-Type': 'application/json' ,
+        'Authorization': "Bearer " + this.jwt.getToken()})}).subscribe({
+            next: (x) => {
+              if(x>0){transaction.moyenne = x}
+            },
+            error: (err) => {
+              console.log(err);
+              this.loading = false;
+              this._snackBar.open("Echec Récupération moyenne jours", "502", {
                 duration: 2000
               })
             }

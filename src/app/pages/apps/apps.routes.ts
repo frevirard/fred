@@ -19,6 +19,7 @@ import { AppInvoiceListComponent } from './invoice/invoice-list/invoice-list.com
 import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.component';
 import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
+import { ActionBoardComponent } from './action-board/action-board.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -127,6 +128,13 @@ export const AppsRoutes: Routes = [
         component: AppEmployeeComponent,
         data: {
           title: 'Employee',
+        }
+      },
+      {
+        path: 'actionBoard',
+        component: ActionBoardComponent,
+        data: {
+          title: 'BackLog',
         }
       },
       {

@@ -55,7 +55,7 @@ totalProjet: any;
     private _snackBar: MatSnackBar) {
     this.yourperformanceChart = {
       series: [],
-      labels: ['Clôturés', 'En Cours', 'Ouverts'],
+      labels: ['Clôturés', 'En Cours', 'Pause', 'Ouverts'],
       chart: {
         type: 'donut',
         height: 205,
@@ -114,13 +114,15 @@ totalProjet: any;
         let perfchart:number[] = [];
         perfchart.push(x.projetsCloture);
         perfchart.push(x.projetsEncours);
-        perfchart.push(x.projetOuverts);
+        perfchart.push(x.projetsPause);
+        perfchart.push(x.projetsOuverts);
 
         this.yourperformanceChart.series = perfchart;
         this.totalProjet = x.totalProjet;
-        this.performanceLists.find(obj => obj.id === 1)!.title = x.projetOuverts + " Projet(s)";
+        this.performanceLists.find(obj => obj.id === 1)!.title = x.projetsOuverts + " Projet(s)";
         this.performanceLists.find(obj => obj.id === 2)!.title = x.projetsEncours + " Projet(s)";
         this.performanceLists.find(obj => obj.id === 3)!.title = x.projetsCloture + " Projet(s)";
+        this.performanceLists.find(obj => obj.id === 4)!.title = x.projetsPause + " Projet(s)";
         this.loading = false;
       },
 
@@ -149,6 +151,14 @@ totalProjet: any;
       title: '- Projets',
       subtext: 'En Cours',
     },
+    {
+      id: 4,
+      color: 'primary',
+      icon: 'icomoon-free:pause',
+      title: '- Projets',
+      subtext: 'En Pause',
+    },
+
     {
       id: 3,
       color: 'accent',

@@ -6,6 +6,8 @@ import {
   ViewChild,
   AfterViewInit,
   OnInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -27,6 +29,7 @@ import { TokenStorageService } from 'src/app/services/tokenStorage.service';
 import { AuthInterceptor } from 'src/app/services/AuthInterceptor.interceptor';
 import { Observable, startWith, map } from 'rxjs';
 import { MesConstants } from 'src/app/services/MesConstants';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 
 
@@ -61,11 +64,12 @@ export interface Employee {
     TablerIconsModule,
     MatNativeDateModule,
     DatePipe,
-    CommonModule
+    CommonModule,
+    MatSortModule
   ],
   providers: [DatePipe, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
 })
-export class AppEmployeeComponent implements AfterViewInit, OnInit {
+export class AppEmployeeComponent implements AfterViewInit, OnInit, OnChanges {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
@@ -80,8 +84,9 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
     'action',
   ];
 
-
+  @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource(this.employees);
+
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
 
@@ -90,6 +95,14 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
     private _snackBar: MatSnackBar,
     private http: HttpClient,
     private jwt: TokenStorageService) { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.dataSource.data = this.employees;
+    setTimeout(() => {
+      this.dataSource.sort = this.sort;
+    })
+
+  }
 
   ngOnInit(): void {
     this.loading = true
@@ -101,17 +114,19 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
       })
     }).subscribe({
       next: (x) => {
-        this.employees = x.sort((a, b) => {
-          if (a.nom < b.nom) {
-            return -1;
-          }
-          if (a.nom > b.nom) {
-            return 1;
-          }
-          return 0;
-        });
+        // this.employees = x;
+         this.employees = x.sort((a, b) => {
+           if (a.nom < b.nom) {
+             return -1;
+           }
+           if (a.nom > b.nom) {
+             return 1;
+           }
+           return 0;
+         });
         this.dataSource = new MatTableDataSource(this.employees);
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.loading = false;
       },
 
@@ -122,10 +137,13 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
         })
       }
     })
+
+    this.dataSource.sort = this.sort;
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(filterValue: string): void {
@@ -148,6 +166,7 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
       }
       // this.dataSource = new MatTableDataSource(this.employees);
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
   }
 
@@ -170,8 +189,12 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
       nbJourInterco: row_obj.nbJourInterco,
 
     });
-    this.dialog.open(AppAddEmployeeComponent);
+    // this.dialog.open(AppAddEmployeeComponent);
+    this._snackBar.open("Ajout réussi", "réussi", {
+      duration: 2000
+    })
     this.table.renderRows();
+
   }
 
   // tslint:disable-next-line - Disables all
@@ -222,8 +245,6 @@ export class AppEmployeeComponent implements AfterViewInit, OnInit {
   }
 }
 
-
-
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'app-dialog-content',
@@ -238,12 +259,13 @@ export class AppEmployeeDialogContentComponent implements OnInit {
   // tslint:disable-next-line - Disables all
   local_data: any;
   selectedImage: any = '';
-  avatars: any[] = ['assets/images/profile/user-1.jpg', 'assets/images/profile/user-2.jpg', 'assets/images/profile/user-3.jpg'
+  avatars: any[] = ['assets/images/profile/user-0-0.jpg','assets/images/profile/user-0.jpg','assets/images/profile/user-1.jpg', 'assets/images/profile/user-2.jpg', 'assets/images/profile/user-3.jpg'
     , 'assets/images/profile/user-4.jpg', 'assets/images/profile/user-5.jpg', 'assets/images/profile/user-6.jpg', 'assets/images/profile/user-7.jpg',
     'assets/images/profile/user-8.jpg', 'assets/images/profile/user-9.jpg', 'assets/images/profile/user-10.jpg'
   ]
   filteredsAvatar: Observable<any[]>;
   stateCtrl = new FormControl('');
+
 
   constructor(
     public datePipe: DatePipe,
@@ -264,8 +286,9 @@ export class AppEmployeeDialogContentComponent implements OnInit {
     this.action = this.local_data.action;
 
     if (this.local_data.avatar === undefined) {
-      this.local_data.avatar = 'assets/images/profile/user-1.jpg';
+      this.local_data.avatar = 'assets/images/profile/user-0.jpg';
     }
+
   }
 
 

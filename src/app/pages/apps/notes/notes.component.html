@@ -1,4 +1,15 @@
 <mat-card class="mat-card-top notes-app cardWithShadow overflow-hidden">
+  <div *ngIf="this.loading">
+    <mat-card class="b-1 shadow-none">
+      <mat-card-header style="display: flex; justify-content: center;">
+        <mat-card-title>Chargement...</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="b-t-1" style="display: flex; justify-content: center;">
+        <mat-spinner></mat-spinner>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
   <mat-sidenav-container
     [ngClass]="{
       'side-panel-opened': sidePanelOpened,
@@ -35,7 +46,7 @@
         <h4 class="mat-subtitle-1 f-s-16 f-w-600 p-16 m-t-16">Toutes les notes</h4>
 
         <mat-nav-list class="p-x-16">
-          @if(notes.length > 0) { @for(note of notes; track note.title) {
+          @if(notes.length > 0) { @for(note of notes; track note.id) {
           <mat-list-item
             class="notes-item rounded m-b-8 bg-light-{{ note.color }}"
             (click)="onSelect(note)"
@@ -80,13 +91,14 @@
       </div>
     </mat-toolbar>
     <mat-card-content class="p-24">
-      @if(notes.length > 0) {
+      @if(notes.length > 0 && selectedNote) {
       <div>
         <h4 class="mat-subtitle-1 f-s-16 f-w-600 m-y-16">Editer la note</h4>
         <mat-form-field appearance="outline" class="w-100">
           <textarea
             matInput
             [(ngModel)]="selectedNote.title"
+            (ngModelChange)="onNameChange($event)"
             rows="5"
             class="note-content"
           ></textarea>

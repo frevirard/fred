@@ -27,11 +27,11 @@
               style="min-height: 150px;"
             >
             <!-- <div class="taskboard-task" cdkDrag></div> -->
-              @for(task of todos; track task.title) {
+              @for(task of todos; track task.titre) {
               <div class="taskboard-task" cdkDrag>
-                <div class="f-s-16 m-b-4 f-w-600">{{ task.title }}</div>
+                <div class="f-s-16 m-b-4 f-w-600">{{ task.titre }}</div>
                 <span class="task-decription f-s-14">{{
-                  task.description
+                  task.details
                 }}</span>
                 <div>
                   <div class="d-flex justify-content-end">
@@ -86,11 +86,11 @@
               (cdkDropListDropped)="drop($event)"
               style="min-height: 150px;"
             >
-              @for(task of inprogress; track task.title) {
+              @for(task of inprogress; track task.titre) {
               <div class="taskboard-task" cdkDrag>
-                <div class="f-s-16 m-b-4 f-w-600">{{ task.title }}</div>
+                <div class="f-s-16 m-b-4 f-w-600">{{ task.titre }}</div>
                 <span class="task-decription f-s-14">{{
-                  task.description
+                  task.details
                 }}</span>
                 <div>
                   <div class="d-flex justify-content-end">
@@ -135,7 +135,7 @@
             <div
               class="taskboard-header bg-error p-y-8 p-x-16 rounded text-white m-b-16"
             >
-              <span>En StandBy</span>
+              <span>En Pause</span>
             </div>
             <div
               class="taskboard-cards"
@@ -144,11 +144,11 @@
               (cdkDropListDropped)="drop($event)"
               style="min-height: 150px;"
             >
-              @for(task of onhold; track task.title) {
+              @for(task of onhold; track task.titre) {
               <div class="taskboard-task" cdkDrag>
-                <div class="f-s-16 m-b-4 f-w-600">{{ task.title }}</div>
+                <div class="f-s-16 m-b-4 f-w-600">{{ task.titre }}</div>
                 <span class="task-decription f-s-14">{{
-                  task.description
+                  task.details
                 }}</span>
                 <div>
                   <div class="d-flex justify-content-end">
@@ -201,11 +201,11 @@
               (cdkDropListDropped)="drop($event)"
               style="min-height: 150px;"
             >
-              @for(task of completed; track task.title) {
+              @for(task of completed; track task.titre) {
               <div class="taskboard-task" cdkDrag>
-                <div class="f-s-16 m-b-4 f-w-600">{{ task.title }}</div>
+                <div class="f-s-16 m-b-4 f-w-600">{{ task.titre }}</div>
                 <span class="task-decription f-s-14">{{
-                  task.description
+                  task.details
                 }}</span>
                 <div>
                   <div class="d-flex justify-content-end">

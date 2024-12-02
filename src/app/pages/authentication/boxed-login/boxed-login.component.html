@@ -1,4 +1,4 @@
-<div class="blank-layout-container justify-content-center align-items-center">
+<div class="blank-layout-container justify-content-center align-items-center" *ngIf="isLoggedIn==false">
   <div
     class="position-relative overflow-hidden auth-bg min-vh-100 h-100 w-100 d-flex align-items-center justify-content-center"
   >
@@ -153,7 +153,7 @@
                         <!-- input -->
                       </form>
                       <span class="d-block f-w-500 d-block m-t-24"
-                        >Nouveau sur Lendys Factory ?
+                        >Nouveau sur Lendys PM ?
                         <a
 
                           class="text-decoration-none text-primary f-w-500 f-s-14"
@@ -183,9 +183,9 @@
                         width="300"
                         class="img-fluid"
                       />
-                      <h4 class="mb-0 f-s-22 m-y-20">Suivi Interco</h4>
+                      <h4 class="mb-0 f-s-22 m-y-20">Project Management</h4>
                       <p class="f-s-15 m-b-20 m-t-0 mat-body-1">
-                        Le pôle Transformation Finance donne vie à vos projets
+                         Pôle Transformation Finance
                       </p>
                       <button mat-flat-button color="primary">
                         En savoir plus
@@ -201,3 +201,18 @@
     </div>
   </div>
 </div>
+
+
+<body *ngIf="isLoggedIn==true" style="display: flex;flex-direction: column;">
+  <div class="lendys">
+    <span>L</span>
+    <span>E</span>
+    <span>N</span>
+    <span>D</span>
+    <span class="orange">Y</span>
+    <span>S</span>
+  </div>
+  <div>
+    Project Management
+  </div>
+</body>

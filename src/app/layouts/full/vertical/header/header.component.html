@@ -157,7 +157,7 @@
   <button mat-fab extended color="inherit" [matMenuTriggerFor]="profilemenu" aria-label="Notifications"
     class="d-flex justify-content-center profile-btn-dd">
     <div class="d-flex align-items-center gap-4" *ngIf="this.isConnected">
-      <img src="/assets/images/profile/user-1.jpg" class="rounded-circle object-cover icon-35 profile-dd" width="35" />
+      <img src={{this.avatar}} class="rounded-circle object-cover icon-35 profile-dd" width="35" />
 
       <i data-icon="solar:alt-arrow-down-bold" class="iconify f-s-8"></i>
     </div>
@@ -165,10 +165,10 @@
   <mat-menu #profilemenu="matMenu" class="topbar-dd cardWithShadow">
     <div class="p-x-32 p-y-16">
       <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16">
-        <img src="/assets/images/profile/user-1.jpg" class="rounded-circle" width="56" />
+        <img src={{this.avatar}} class="rounded-circle" width="56" />
         <div class="m-l-16">
           <h6 class="f-s-14 f-w-600 m-0 mat-subtitle-1 d-flex align-items-center">
-            {{this.username}}
+            {{this.nom}} {{this.prenom}}
             <span class="f-s-14 d-block text-success m-l-4">Admin</span>
           </h6>
           <!-- <span> frederic.ekewou&#64;lendys.fr </span> -->
@@ -191,14 +191,17 @@
       }
 
 
+     <div class="curseur">
       <a class="p-8 text-decoration-none d-block text-hover-primary">
         <div class="d-flex align-items-center" (click)="logout()">
           <h5 class="f-s-14 f-w-600 m-0 textprimary mat-subtitle-1 hover-text">
             Se déconnecter
           </h5>
+          <!-- <span class="bg-light-error text-error rounded-sm p-x-8 p-y-4 f-w-500 f-s-12 m-l-4">5</span> -->
         </div>
       </a>
 
+     </div>
 
     </div>
   </mat-menu>

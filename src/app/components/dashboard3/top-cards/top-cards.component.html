@@ -5,8 +5,14 @@
       <mat-spinner *ngIf="this.loading"></mat-spinner>
      </div>
 
+     <div style="margin-bottom: 10px;margin-left: 3px;">
+      <span >Nombre de projets par pôle</span>
+     </div>
+
     <div class="table-xs-responsive" *ngIf="!this.loading">
       <div class="row flex-nowrap" style="display: flex; flex-direction: row;flex-wrap: wrap;">
+
+
         @for(topcard of topcards; track topcard.title) {
         <div class="col">
           <mat-card
@@ -32,12 +38,12 @@
               <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
                 {{ topcard.subtitle }}
               </h6>
-              <button
+              <!-- <button
                 mat-raised-button
                 class="f-w-500 f-s-12 btn-shadow text-nowrap"
               >
                 Voir plus
-              </button>
+              </button> -->
             </mat-card-content>
           </mat-card>
         </div>
@@ -70,12 +76,12 @@
               <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
                 {{ topcard.subtitle }}
               </h6>
-              <button
+              <!-- <button
                 mat-raised-button
                 class="f-w-500 f-s-12 btn-shadow text-nowrap"
               >
                 Voir plus
-              </button>
+              </button> -->
             </mat-card-content>
           </mat-card>
         </div>

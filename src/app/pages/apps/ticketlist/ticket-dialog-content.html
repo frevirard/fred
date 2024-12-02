@@ -14,7 +14,7 @@
       <div class="col-sm-6 col-lg-12" style="margin-top: 6px;">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Catégorie</mat-label>
-          <select matNativeControl required name="categorie" [(ngModel)]="local_data.categorie">
+          <select matNativeControl required name="categorie" [(ngModel)]="local_data.categorie" disabled>
             <option value="Projet">Projet</option>
             <option value="Formation">Formation</option>
             <option value="IT">IT</option>
@@ -26,18 +26,31 @@
         </mat-form-field>
       </div>
 
-
       <div class="col-sm-6 col-lg-12">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Titre</mat-label>
-          <input type="text" matInput required id="title" name="title" [(ngModel)]="local_data.titre"
-            placeholder="Tritre de l'action" />
+          <input type="text" matInput required id="title" name="titre" [(ngModel)]="local_data.titre"
+            placeholder="Tritre de l'action"  [matAutocomplete]="auto4" [formControl]="actionCtrl"/>
+
         </mat-form-field>
+
+        <mat-autocomplete #auto4="matAutocomplete">
+          @for(action of filteredAction| async; track action.id) {
+          <mat-option (click)="updateProgression(action)" [value]="action.titre" class="d-flex align-items-center">
+            <span>{{ action.titre}} </span> |
+            <small>Donneur d'ordre: {{ action.donneurOrdre }}</small>
+          </mat-option>
+          }
+
+        </mat-autocomplete>
       </div>
+
+
+
       <div class="col-sm-6 col-lg-12">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Détails de l'action</mat-label>
-          <input type="text" matInput required id="subtext" name="subtext" [(ngModel)]="local_data.details"
+          <input type="text" matInput required id="subtext" name="details" [(ngModel)]="local_data.details"
             placeholder="Details de l'action" />
         </mat-form-field>
       </div>
@@ -68,7 +81,6 @@
           <input matInput required id="assignee" name="assignee" aria-label="State" [matAutocomplete]="auto2"
             [(ngModel)]="local_data.assignee" [formControl]="stateCtrl" />
         </mat-form-field>
-
 
         <mat-autocomplete #auto2="matAutocomplete">
           @for(employee of filteredSEmployee| async; track employee.nomComplet) {
@@ -108,8 +120,9 @@
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Statu</mat-label>
           <select matNativeControl required name="statu" [(ngModel)]="local_data.statu">
-            <option value="En cours">En cours</option>
             <option value="Ouvert">Ouvert</option>
+            <option value="En cours">En cours</option>
+            <option value="Pause">Pause</option>
             <option value="Cloture">Clôturé</option>
           </select>
         </mat-form-field>
@@ -154,7 +167,7 @@
 
 <div mat-dialog-actions class="p-24 p-t-0">
   <button mat-flat-button (click)="doAction()" color="primary">
-    {{action}}
+    Oui
   </button>
   <button mat-stroked-button color="warn" (click)="closeDialog()">
     Annuler

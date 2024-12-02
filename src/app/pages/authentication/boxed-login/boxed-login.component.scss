@@ -1,0 +1,52 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+}
+
+/* Style du texte */
+.lendys {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #000000;
+  display: flex;
+  gap: 0.2em;
+}
+
+/* Animation pour chaque lettre */
+.lendys span {
+  display: inline-block;
+  opacity: 0;
+  transform: scale(0.5);
+  animation: appearZoom 0.6s ease forwards;
+}
+
+/* Couleur orange pour le "y" */
+.lendys span.orange {
+  color: rgb(242, 105, 33);
+  animation-delay: 0.6s;
+}
+
+/* Ajout de délais d'animation pour chaque lettre */
+.lendys span:nth-child(1) { animation-delay: 0.1s; }
+.lendys span:nth-child(2) { animation-delay: 0.2s; }
+.lendys span:nth-child(3) { animation-delay: 0.3s; }
+.lendys span:nth-child(4) { animation-delay: 0.4s; }
+.lendys span:nth-child(5) { animation-delay: 0.5s; }
+.lendys span:nth-child(6) { animation-delay: 0.6s; }
+
+/* Animation keyframes */
+@keyframes appearZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

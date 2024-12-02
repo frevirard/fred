@@ -1,0 +1,112 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title><strong>{{action}}</strong></h2>
+
+@if(action !== 'Delete') {
+<mat-dialog-content style="max-width: 600px">
+  <form #userForm="ngForm">
+    <div class="d-flex align-items-center m-b-16">
+
+      <img class="mat-card-avatar" [src]="local_data.avatar" class="rounded-circle" width="50" />
+      <button mat-flat-button color="primary" class="m-l-16 input-file-button">
+        Avatar
+        <!-- <input type="file" (change)="selectFile($event)" #fileInput /> -->
+      </button>
+
+       <div class="col-lg-6" style="margin-top: 20px;">
+
+        <mat-form-field appearance="outline" class="w-100">
+           <mat-label>Avatar</mat-label>
+          <input
+          [matAutocomplete]="auto3"
+          [formControl]="stateCtrl"
+
+          type="text" matInput required id="nom" name="avatar"
+
+          placeholder="Avatar"
+          />
+       </mat-form-field>
+
+        <mat-autocomplete #auto3="matAutocomplete">
+          @for(avatar of avatars; track avatar) {
+          <mat-option (click)="updatePicture(avatar)"
+            [value]="avatar"
+            class="d-flex align-items-center"
+          >
+            <img alt="" class="m-r-8" [src]="avatar" height="25" />
+
+            <span>Choisir</span> |
+            <small>avatar</small>
+          </mat-option>
+          }
+        </mat-autocomplete>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nom</mat-label>
+          <input type="text" matInput required id="nom" name="nom" [(ngModel)]="local_data.nom" placeholder="Nom" />
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Prénoms</mat-label>
+          <input type="text" matInput required id="prenoms" name="prenoms" placeholder="Prénoms"
+            [(ngModel)]="local_data.prenoms" />
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Email</mat-label>
+          <input type="text" matInput required id="prenoms" name="email" placeholder="Email"
+            [(ngModel)]="local_data.email" />
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Pole</mat-label>
+            <mat-select value="0" name="pole" [(ngModel)]="local_data.pole">
+              <mat-option value="0"></mat-option>
+              <mat-option value="Transformation Finance">Transformation Finance</mat-option>
+              <mat-option value="Consolidation">Consolidation & Reporting IFRS / Prudentiel</mat-option>
+              <mat-option value="Compta">Comptabilité - Fiscalité</mat-option>
+              <mat-option value="FSO">Financial Services & Operations</mat-option>
+              <mat-option value="Pilotage et Performance">Pilotage & Performance</mat-option>
+              <mat-option value="Risque et Actuariat">Risque et Actuariat</mat-option>
+
+            </mat-select>
+        </mat-form-field>
+      </div>
+
+
+
+      <!-- <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <input type="text" matInput required id="salary" name="salary" [(ngModel)]="local_data.Salary"
+            placeholder="Pôle" />
+        </mat-form-field>
+      </div> -->
+
+    </div>
+    <button mat-flat-button (click)="doAction()" mat-flat-button color="primary" [disabled]="!userForm.valid">
+      {{action}}
+    </button>
+    <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+      Retour
+    </button>
+  </form>
+</mat-dialog-content>
+} @else {
+<div class="p-x-24">
+  <p>Voulez-vous poursuivre ? <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+</div>
+<div mat-dialog-actions class="p-x-24 p-b-24">
+  <button mat-button (click)="doAction()" mat-flat-button color="warn">
+    {{action}}
+  </button>
+  <button mat-button (click)="closeDialog()" class="m-l-8">Cancel</button>
+</div>
+}
